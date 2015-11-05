@@ -25,7 +25,7 @@
     vm.temperatures = _temperatures;
     vm.latest = _latest;
     vm.power = _power;
-    vm.currentProgram = _currentProgram
+    vm.currentProgram = {};
 
     vm.selectedProgram = {};
     vm.programs = TemperatureService.getPrograms();
