@@ -8,6 +8,9 @@ from firebase import firebase
 os.system('modprobe w1-gpio')
 os.system('modprobe w1-therm')
 
+import requests.packages.urllib3
+requests.packages.urllib3.disable_warnings()
+
 firebase = firebase.FirebaseApplication('https://iot-homebrew.firebaseio.com', None)
 
 base_dir = '/sys/bus/w1/devices/'
@@ -34,6 +37,7 @@ def read_temp_raw():
 	return lines
 
 def power_on():
+	print('Virta paalle')
 	global power_is_on
 	power_is_on = True
 	GPIO.output(on_pin, True)
@@ -42,6 +46,7 @@ def power_on():
 	post_power(power_is_on)
 
 def power_off():
+	print('Virta pois')
 	global power_is_on
 	power_is_on = False
 	GPIO.output(off_pin, True)
@@ -81,6 +86,7 @@ print('Aloitetaan')
 print('Laitefilu: ' + device_file)
 while True:
 	current_temp = read_temp()[0]
+	print(current_temp)
 	post_temp(current_temp)
 	if current_temp > (temp + hysteresis) and power_is_on == True:
 		power_off()
