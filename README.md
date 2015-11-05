@@ -4,13 +4,13 @@ Thermostatic control for a brewing station using Raspberry pi.
 
 ## Required python libraries
 
-### Requests
+Requests
 >pip install requests
 
-### Firebase
+Firebase
 >pip install python-firebase
 
-### RPi.GPIO
+RPi.GPIO
 >pip install RPi.GPIO
 
 ## Running
