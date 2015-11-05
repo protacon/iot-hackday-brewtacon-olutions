@@ -46,22 +46,34 @@
               chart: {
                   type: 'spline',
                   animation: Highcharts.svg, // don't animate in old IE
-                  marginRight: 10
+                  marginRight: 10,
+                  backgroundColor:'transparent'
               },
               title: {
-                  text: 'Panograafi'
+                  text: ''
               },
               xAxis: {
-                  title: {text: ''}
+                  title: {text: ''},
+                  color: '#FFFFFF',
+                  labels: {
+                      style: {
+                          color: '#FFFFFF'
+                      },
+                  },
               },
               yAxis: {
+                  labels: {
+                      style: {
+                          color: '#FFFFFF'
+                      },
+                  },
                   title: {
-                      text: 'Value'
+                      text: null,
                   },
                   plotLines: [{
                       value: 0,
                       width: 1,
-                      color: '#808080'
+                      color: '#FFFFFF'
                   }]
               },
               tooltip: {

@@ -1,9 +1,10 @@
 <div class="temperature">
     <div id="chart-area">
         <div id="header">PANOKONE 2020</div>
-        <highchart id="chart1" config="vm.chartConfig"></highchart>
+        <highchart class="chart" id="chart1" config="vm.chartConfig"></highchart>
         <div id="current-program">
-            <span>ZE CURRENT BROGRAM IZ: {{vm.currentProgram.name}} WITH DE STEP: </span>
+            <span>ZE CURRENT <b>BROGRAM</b> IZ: {{vm.currentProgram.name}} </span><br>
+            <span>WITH DE STEP: </span>
         </div>
         
     </div>
@@ -16,7 +17,7 @@
         </div>
         <span class="temp">{{vm.temperatures[vm.temperatures.length - 1].temp | number: 1}}</span>
         <span class="temp-c">°C</span>
-        <p>Kohde lämpötila: {{vm.temperatures[vm.temperatures.length - 1].desiredTemp}}</p>
+        <!-- <p>Kohde lämpötila: {{vm.temperatures[vm.temperatures.length - 1].desiredTemp}}</p> -->
         <div class="heatgroup">
             <span class="heating-text">Heating is:</span>
             <span data-ng-show="vm.power[0].state" class="heating-on">ON</span>
