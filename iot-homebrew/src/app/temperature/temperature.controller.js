@@ -19,12 +19,20 @@
    *
    * @constructor
    */
-  function TemperatureController(_temperatures, _latest, _power) {
+  function TemperatureController(_temperatures, _latest, _power, TemperatureService) {
     var vm = this;
 
     vm.temperatures = _temperatures;
     vm.latest = _latest;
     vm.power = _power;
+    vm.currentProgram = _currentProgram
+
+    vm.selectedProgram = {};
+    vm.programs = TemperatureService.getPrograms();
+
+    vm.setCurrentProgram = function setCurrentProgram(){
+      TemperatureService.setCurrentProgram(vm.selectedProgram)
+    };
 
     // Chart configuration
     vm.chartConfig = {
