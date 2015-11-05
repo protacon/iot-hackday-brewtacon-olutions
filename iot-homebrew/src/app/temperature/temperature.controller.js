@@ -34,6 +34,7 @@
     vm.programs = TemperatureService.getPrograms();
 
     vm.setCurrentProgram = function setCurrentProgram(){
+      TemperatureService.clearTemperatures();
       TemperatureService.setCurrentProgram(vm.selectedProgram)
     };
 
@@ -62,6 +63,8 @@
                   },
               },
               yAxis: {
+                  min: 0,
+                  max: 100,
                   labels: {
                       style: {
                           color: '#FFFFFF'

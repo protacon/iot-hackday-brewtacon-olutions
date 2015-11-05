@@ -26,7 +26,8 @@
     function TemperatureService(Firebase, config, dataservice) {
         return {
             setCurrentProgram: setCurrentProgram,
-            getPrograms: getPrograms
+            getPrograms: getPrograms,
+            clearTemperatures: clearTemperatures
 
         };
 
@@ -60,6 +61,12 @@
             firebase.set(program);
         }
 
+        function clearTemperatures() {
+            var firebase = dataservice.getReference('Temperatures');
+
+            firebase.set([]);
+        }
+
         function getPrograms() {
             return [
                 {
@@ -68,18 +75,18 @@
                     steps: [
                         {
                             id: 1,
-                            temp: 60,
-                            duration: 2
+                            temp: 25,
+                            duration: 1
                         },
                         {
                             id: 2,
-                            temp: 75,
-                            duration: 2
+                            temp: 15,
+                            duration: 1
                         },
                         {
                             id: 3,
-                            temp: 85,
-                            duration: 2
+                            temp: 20,
+                            duration: 1
                         }
                     ]
                 }
