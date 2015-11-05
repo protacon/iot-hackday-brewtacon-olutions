@@ -75,8 +75,8 @@
   function _latest($firebaseArray, dataservice) {
     var ref = dataservice.getReference('Temperatures');
 
-    // create a query for the most recent 25 messages on the server
-    var query = ref.limitToLast(10);
+    // create a query for the most recent 1 messages on the server
+    var query = ref.limitToLast(1);
     // the $firebaseArray service properly handles database queries as well
     return  $firebaseArray(query);
   }

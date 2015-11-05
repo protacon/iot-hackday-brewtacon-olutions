@@ -2,7 +2,7 @@
     <div id="header">PANOKONE 2020</div>
     <div id="chart-area">
         <h2>Viimeisimmät temperatuurit</h2>
-        <p data-ng-repeat="item in vm.latest | orderBy: '-timestamp'">{{item.temp}}</p>
+        <highchart id="chart1" config="vm.chartConfig"></highchart>
     </div>
     <div id="select-program">
         <select ng-options="program as program.name for program in vm.programs track by program.id" ng-model="vm.selectedProgram"></select>
