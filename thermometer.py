@@ -3,6 +3,7 @@ import glob
 import time
 import RPi.GPIO as GPIO
 import json
+from datetime import datetime
 from firebase import firebase
 
 os.system('modprobe w1-gpio')
@@ -24,7 +25,7 @@ GPIO.setmode(GPIO.BOARD)
 GPIO.setup(on_pin, GPIO.OUT)
 GPIO.setup(off_pin, GPIO.OUT)
 
-temp = 28
+desired_temp = 0
 hysteresis = 0.5
 power_is_on = False
 
@@ -79,17 +80,36 @@ def post_power(power):
 	json_power = {"timestamp": time.time(), "state": power}
 	firebase.post(url='/Power', data=json_power, headers=content_type)
 
+def get_current_program():
+	global desired_temp
+	current_program = firebase.get('/CurrentProgram', None)
+	desired_temp = get_desired_temp(current_program)
+
+def get_desired_temp(current_program):
+	if current_program != None and current_program["state"] == True:
+		steps = current_program["steps"]
+		for step in steps:
+			current_time = datetime.now()
+			if current_time > datetime.fromtimestamp(step["startDate"] / 1000) and current_time < datetime.fromtimestamp(step["endDate"] / 1000):
+				return step["temp"]
+	return 0
+
 GPIO.output(on_pin, False)
 GPIO.output(off_pin, False)
 
 print('Aloitetaan')
 print('Laitefilu: ' + device_file)
+loops = 0
 while True:
 	current_temp = read_temp()[0]
-	print(current_temp)
+	print("desired temp: " + str(desired_temp) + ", current temp: " + str(current_temp))
 	post_temp(current_temp)
-	if current_temp > (temp + hysteresis) and power_is_on == True:
+	if current_temp > (desired_temp + hysteresis) and power_is_on == True:
 		power_off()
-	elif current_temp < (temp - hysteresis) and power_is_on == False:
+	elif current_temp < (desired_temp - hysteresis) and power_is_on == False:
 		power_on()
 	time.sleep(1)
+	loops = loops + 1
+	if loops == 1:
+		get_current_program()
+		loops = 0
