@@ -47,7 +47,8 @@
               resolve: {
                 _temperatures: _temperatures,
                 _latest: _latest,
-                _power: _power
+                _power: _power,
+                _currentProgram: _currentProgram
               }
             }
           }
@@ -87,5 +88,9 @@
     var query = ref.limitToLast(1);
     // the $firebaseArray service properly handles database queries as well
     return  $firebaseArray(query);
+  }
+
+  function _currentProgram($firebaseArray, dataservice) {
+    return $firebaseArray(dataservice.getReference('CurrentProgram'));
   }
 })();

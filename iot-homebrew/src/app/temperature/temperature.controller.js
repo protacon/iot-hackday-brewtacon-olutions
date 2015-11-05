@@ -19,7 +19,7 @@
    *
    * @constructor
    */
-  function TemperatureController(_temperatures, _latest, _power, TemperatureService) {
+  function TemperatureController(_temperatures, _latest, _power, _currentProgram, TemperatureService) {
     var vm = this;
 
     vm.temperatures = _temperatures;
