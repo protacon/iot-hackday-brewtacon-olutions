@@ -3,7 +3,7 @@
     padding: 0;
   }
 
-  md-input-container {
+  .md-input-container {
     padding-bottom: 0;
     padding-left: 10px;
   }
@@ -66,58 +66,72 @@ html {
 #header {
   font-size: 7vw;
   padding: 2%;
+  min-height: 75px;
 }
 
 .logo {
-  width: 100%;
-  height: 100%;
-}
-
-.placeholder {
-  border: 1px solid red;
+  width: 95%;
+  height: 95%;
 }
 
 #chart-area {
   position: relative;
   float: left;
-  width: 66%;
+  width: 71%;
   height: 99%;
+}
+
+#select-program {
+  height: 20%;
+  min-height: 66px;
+  padding: 12% 2% 2%;
 }
 
 #temperature-container {
   height: 100%;
   width: 100%;
-  margin: 0 auto
+  margin: 0 auto;
 }
 
 #text-area {
   position: relative;
   float: left;
-  width: 33%;
+  width: 29%;
   height: 99%;
 }
 
 .temp {
-  font-size: 10vw;
+  font-size: 11vw;
 }
 
 .temp-c {
   font-size: 4vw;
 }
 
-.heating-text {
+.heatgroup {
+  font-weight: 200;
+  margin-top: -7%;
+}
 
+.heating-text {
+  font-size: 4vw;
 }
 
 .heating-on {
-
+  font-size: 4vw;
+  font-weight: 700;
 }
 
 .heating-off {
+  font-size: 4vw;
+}
 
+.logoholder {
+  margin-top: 7%;
 }
 
 .power {
-  width: 100%;
+  width: 95%;
   text-align: center;
+  float: left;
 }
