@@ -3,6 +3,7 @@ import glob
 import time
 import RPi.GPIO as GPIO
 import json
+from datetime import datetime
 from firebase import firebase
 
 os.system('modprobe w1-gpio')
@@ -24,9 +25,12 @@ GPIO.setmode(GPIO.BOARD)
 GPIO.setup(on_pin, GPIO.OUT)
 GPIO.setup(off_pin, GPIO.OUT)
 
-temp = 28
+desired_temp = 0
 hysteresis = 0.5
 power_is_on = False
+get_current_program_interval = 5
+current_program = {}
+current_step_id = {}
 
 content_type = {'X_CONTENT_TYPE': 'application/json'}
 
@@ -65,13 +69,12 @@ def read_temp():
 
 	if equals_pos != -1:
 		temp_string = lines[1][equals_pos+2:]
-		temp_c = float(temp_string) / 1000.0
-		temp_f = temp_c * 9.0 / 5.0 + 32.0
-		return temp_c, temp_f
+		temp = float(temp_string) / 1000.0
+		return temp
 
 def post_temp(current_temp):
 	global content_type
-	temp_info = {"timestamp": time.time(), "temp": current_temp}
+	temp_info = {"timestamp": time.time(), "temp": current_temp, "desiredTemp": desired_temp, "step": current_step_id}
 	firebase.post(url='/Temperatures', data=temp_info, headers=content_type)
 
 def post_power(power):
@@ -79,17 +82,45 @@ def post_power(power):
 	json_power = {"timestamp": time.time(), "state": power}
 	firebase.post(url='/Power', data=json_power, headers=content_type)
 
+def get_current_program():
+	global desired_temp
+	global current_program
+	current_program = firebase.get('/CurrentProgram', None)
+
+def get_desired_temp():
+	global current_step_id	
+	if current_program != None and current_program["state"] == True:
+		steps = current_program["steps"]
+		for step in steps:
+			current_time = datetime.now()
+			if current_time > datetime.fromtimestamp(step["startDate"] / 1000) and current_time < datetime.fromtimestamp(step["endDate"] / 1000):
+				current_step_id = step["id"]
+				return step["temp"]
+	current_step_id = None
+	return 0
+
 GPIO.output(on_pin, False)
 GPIO.output(off_pin, False)
 
 print('Aloitetaan')
 print('Laitefilu: ' + device_file)
+loops = 0
 while True:
-	current_temp = read_temp()[0]
-	print(current_temp)
+	if loops == 0:
+		get_current_program()
+		loops = get_current_program_interval
+	loops = loops - 1
+
+	current_temp = read_temp()
+	desired_temp = get_desired_temp()
+
+	print("desired temp: " + str(desired_temp) + ", current temp: " + str(current_temp))
+
 	post_temp(current_temp)
-	if current_temp > (temp + hysteresis) and power_is_on == True:
+
+	if current_temp > (desired_temp + hysteresis) and power_is_on == True:
 		power_off()
-	elif current_temp < (temp - hysteresis) and power_is_on == False:
+	elif current_temp < (desired_temp - hysteresis) and power_is_on == False:
 		power_on()
+
 	time.sleep(1)

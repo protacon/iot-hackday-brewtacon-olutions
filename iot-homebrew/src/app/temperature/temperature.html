@@ -1,13 +1,11 @@
 <div class="temperature">
-
     <div id="chart-area">
         <div id="header">PANOKONE 2020</div>
-        <h2>Viimeisimmät temperatuurit</h2>
-        <p data-ng-repeat="item in vm.latest | orderBy: '-timestamp'">{{item.temp}}</p>
-        <!--- Chartti p:n ja ton ylemmän h2 tilalle! -->
+        <highchart id="chart1" config="vm.chartConfig"></highchart>
         <div id="current-program">
-            <span>ZE CURRENT BROGRAM IZ: </span>
+            <span>ZE CURRENT BROGRAM IZ: {{vm.currentProgram.name}} WITH DE STEP: </span>
         </div>
+        
     </div>
     <div id="text-area">
         <div id="select-program">
@@ -18,6 +16,7 @@
         </div>
         <span class="temp">{{vm.temperatures[vm.temperatures.length - 1].temp | number: 1}}</span>
         <span class="temp-c">°C</span>
+        <p>Kohde lämpötila: {{vm.temperatures[vm.temperatures.length - 1].desiredTemp}}</p>
         <div class="heatgroup">
             <span class="heating-text">Heating is:</span>
             <span data-ng-show="vm.power[0].state" class="heating-on">ON</span>
