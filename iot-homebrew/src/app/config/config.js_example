@@ -1,0 +1,12 @@
+(function() {
+  'use strict';
+
+  angular
+    .module('iot.config', [])
+    .constant({
+      "config": {
+        "firebaseUrl": "https://CHANGETHISTOMATCHYOURFIREBASEURL.firebaseio.com/"
+      }
+    })
+  ;
+})();
