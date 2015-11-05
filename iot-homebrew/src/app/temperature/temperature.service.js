@@ -67,16 +67,19 @@
                     id: 1,
                     steps: [
                         {
+                            id: 1,
                             temp: 60,
-                            duration: 45
+                            duration: 2
                         },
                         {
+                            id: 2,
                             temp: 75,
-                            duration: 15
+                            duration: 2
                         },
                         {
+                            id: 3,
                             temp: 85,
-                            duration: 5
+                            duration: 2
                         }
                     ]
                 }

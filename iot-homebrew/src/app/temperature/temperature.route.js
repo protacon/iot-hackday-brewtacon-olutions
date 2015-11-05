@@ -90,7 +90,7 @@
     return  $firebaseArray(query);
   }
 
-  function _currentProgram($firebaseArray, dataservice) {
-    return $firebaseArray(dataservice.getReference('CurrentProgram'));
+  function _currentProgram($firebaseObject, dataservice) {
+    return $firebaseObject(dataservice.getReference('CurrentProgram'))
   }
 })();

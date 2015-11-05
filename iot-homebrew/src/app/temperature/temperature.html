@@ -13,6 +13,7 @@
     <div id="text-area">
         <span class="temp">{{vm.temperatures[vm.temperatures.length - 1].temp | number: 1}}</span>
         <span class="temp-c">°C</span>
+        <p>Kohde lämpötila: {{vm.temperatures[vm.temperatures.length - 1].desiredTemp}}</p>
         <span class="heating-text">Heating is:</span>
             <span data-ng-show="vm.power[0].state" class="heating-on">ON</span>
             <span data-ng-show="!vm.power[0].state" class="heating-off">OFF</span>
@@ -20,6 +21,6 @@
         <img class="logo" src="img/logo.png" />
     </div>
     <div id="current-program">
-        <span>ZE CURRENT BROGRAM IZ: </span>
+        <span>ZE CURRENT BROGRAM IZ: {{vm.currentProgram.name}} WITH DE STEP: </span>
     </div>
 </div>
