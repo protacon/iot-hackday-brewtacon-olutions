@@ -1,0 +1,18 @@
+<div class="demo">
+    <div class="messages"
+         data-demo-screen
+         data-demo-scroll="vm.messages"
+    >
+        <md-list>
+            <md-list-item class="md-2-line" data-ng-repeat="message in vm.messages">
+                <div class="md-list-item-text">
+                    <h3>
+                        {{message.user_name}}
+                    </h3>
+                    <p>{{message.text}}</p>
+                </div>
+            </md-list-item>
+        </md-list>
+    </div>
+</div>
+

@@ -1,0 +1,25 @@
+<div class="temperature">
+    <div id="header">PANOKONE 2020</div>
+    <div id="chart-area">
+        <h2>Viimeisimmät temperatuurit</h2>
+        <p data-ng-repeat="item in vm.latest | orderBy: '-timestamp'">{{item.temp}}</p>
+    </div>
+    <div id="select-program">
+        <select ng-options="program as program.name for program in vm.programs track by program.id" ng-model="vm.selectedProgram"></select>
+        <br>
+        <button data-ng-click="vm.setCurrentProgram()">Pane!</button>
+        <button data-ng-click="vm.stopCurrentProgram()">Lopeta pano!</button>
+    </div>
+    <div id="text-area">
+        <span class="temp">{{vm.temperatures[vm.temperatures.length - 1].temp | number: 1}}</span>
+        <span class="temp-c">°C</span>
+        <span class="heating-text">Heating is:</span>
+            <span data-ng-show="vm.power[0].state" class="heating-on">ON</span>
+            <span data-ng-show="!vm.power[0].state" class="heating-off">OFF</span>
+        <span class="power">POWERED BY</span>
+        <img class="logo" src="img/logo.png" />
+    </div>
+    <div id="current-program">
+        <span>ZE CURRENT BROGRAM IZ: </span>
+    </div>
+</div>
