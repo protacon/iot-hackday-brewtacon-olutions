@@ -5,18 +5,26 @@ html {
 }
 
 body {
+    color: #fff;
   font-family: "Lato", Verdana;
-  color: #fff;
   background: #000 url("../img/bg.png") no-repeat center center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
+  padding-top: 60px;
+}
+
+@media (max-width: 979px) {
+    body {
+        padding-top: 0px;
+    }
 }
 
 #header {
   font-size: 7vw;
   padding: 2%;
+  color: lightgrey;
 }
 
 .logo {
@@ -28,25 +36,11 @@ body {
   border: 1px solid red;
 }
 
-#chart-area {
-  position: relative;
-  float: left;
-  width: 66%;
-  height: 99%;
+
+#chart1 {
+
 }
 
-#container {
-  height: 100%;
-  width: 100%;
-  margin: 0 auto
-}
-
-#text-area {
-  position: relative;
-  float: left;
-  width: 33%;
-  height: 99%;
-}
 
 .temp {
   font-size: 10vw;
@@ -71,4 +65,25 @@ body {
 .power {
   width: 100%;
   text-align: center;
+}
+
+.blink {
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+    animation-name: blink;
+}
+
+@keyframes blink {
+    0% {
+        opacity: 1;
+    }
+    75% {
+        opacity: 1;
+    }
+    76% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 0;
+    }
 }

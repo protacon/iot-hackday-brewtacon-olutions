@@ -48,7 +48,8 @@
                 _temperatures: _temperatures,
                 _latest: _latest,
                 _power: _power,
-                _currentProgram: _currentProgram
+                _currentStep: _currentStep,
+                _program: _program
               }
             }
           }
@@ -81,6 +82,15 @@
     return  $firebaseArray(query);
   }
 
+    function _program($firebaseObject, dataservice) {
+        var ref = dataservice.getReference('Programs');
+
+        // create a query for the most recent 1 messages on the server
+        //var query = ref.limitToLast(1);
+        // the $firebaseArray service properly handles database queries as well
+        return  $firebaseObject(ref);
+    }
+
   function _power($firebaseArray, dataservice) {
     var ref = dataservice.getReference('Power');
 
@@ -90,7 +100,7 @@
     return  $firebaseArray(query);
   }
 
-  function _currentProgram($firebaseObject, dataservice) {
-    return $firebaseObject(dataservice.getReference('CurrentProgram'))
+  function _currentStep($firebaseObject, dataservice) {
+    return $firebaseObject(dataservice.getReference('CurrentStep'))
   }
 })();

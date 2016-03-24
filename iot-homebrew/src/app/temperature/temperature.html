@@ -1,31 +1,119 @@
-<div class="temperature">
-    <div id="chart-area">
-        <div id="header">PANOKONE 2020</div>
-        <highchart class="chart" id="chart1" config="vm.chartConfig"></highchart>
-        <div id="current-program">
-            <p>ZE CURRENT <b>BROGRAM</b> IZ: {{vm.currentProgram.name}} </p>
-            <p>WITH DE STEP: {{vm.temperatures[vm.temperatures.length - 1].step}}</p>
-            <p>TARGET ZEMPERATURE: {{vm.temperatures[vm.temperatures.length - 1].desiredTemp}}</p>
-        </div>
-        
+    <div id="chart-area" class="col-md-8">
+        <form class="form">
+
+            <div class="form-group">
+                <div class="row">
+                    <highchart class="chart" id="chart1" config="vm.chartConfig"></highchart>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-5">
+                        <label class="sr-only" for="program-name">Brew name</label>
+                        <input id="program-name" class="form-control" type="text" data-ng-model="vm.program[0].name" value="{{vm.program[0].name}}" placeholder="Brew name" />
+                    </div>
+                    <div class="col-md-1">
+                        </div>
+                        <div class="col-md-3">
+                            CURRENT STEP:
+                            <span data-ng-show="vm.currentStep.temp"><b>{{vm.currentStep.temp}}</b> °C ({{vm.currentStep.duration}} mins)</span>
+                            <span data-ng-show="!vm.currentStep.temp">N/A</span>
+                        </div>
+                        <div class="col-md-3">
+                            DIFFERENCE:
+                            <span data-ng-show="vm.currentStep.temp"><b>{{vm.currentTemp - vm.currentStep.temp | number: 1}}</b> °C
+                                <span data-ng-show="vm.estimatedSecsToTarget && vm.estimatedSecsToTarget > 0 && vm.estimatedSecsToTarget < 60*60*2 && (vm.currentTemp < vm.currentStep.temp-vm.temperatureTolerance || vm.currentTemp > vm.currentStep.temp+vm.temperatureTolerance)">
+                                    (approx. {{vm.estimatedSecsToTarget | secondsToDateTime | date:'HH:mm:ss'}} left)
+                                </span>
+                            </span>
+                            <span data-ng-show="!vm.currentStep.temp">N/A</span>
+                        </div>
+                </div>
+            </div>
+
+            <div class="form-group" data-ng-repeat="step in vm.program[0].steps track by $index">
+                <div class="row">
+                    <div class="col-md-2">
+                        <label class="sr-only" for="temp{{$index}}">Temp</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" data-ng-model="step.temp" value="{{step.temp}}" id="temp{{$index}}" placeholder="Temperature">
+                            <div class="input-group-addon">°C</div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-2">
+                        <label class="sr-only" for="temp{{$index}}">Temp</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" data-ng-model="step.duration" value="{{step.duration}}" id="time{{$index}}" placeholder="Minutes">
+                            <div class="input-group-addon">mins</div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-2">
+                        <div class="input-group">
+                            <button data-ng-show="!step.on" class="btn btn-default" data-ng-click="vm.setCurrentStep($index)">
+                                <i class="fa fa-play"></i>
+                            </button>
+                            <button data-ng-show="step.on && (vm.currentTemp < step.temp-vm.temperatureTolerance || vm.currentTemp > step.temp+vm.temperatureTolerance)" class="btn btn-default" data-ng-click="vm.resetCurrentStep()">
+                                <i class="fa fa-pause"></i>
+                            </button>
+                            <button data-ng-show="step.on && (vm.currentTemp > step.temp-vm.temperatureTolerance && vm.currentTemp < step.temp+vm.temperatureTolerance)" class="btn btn-{{vm.stepType(step.duration, step.secsInReachedTargetTemp)}}" data-ng-click="vm.resetCurrentStep()">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </button>
+                            <button class="btn btn-danger" data-ng-click="vm.removeStep($index)"><i class="fa fa-trash"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="col-md-1">
+                        {{step.secsInReachedTargetTemp | secondsToDateTime | date:'HH:mm:ss'}}
+                    </div>
+
+                    <div class="col-md-4">
+                        <uib-progressbar type="{{vm.stepType(step.duration, step.secsInReachedTargetTemp)}}" max="step.duration * 60" value="step.secsInReachedTargetTemp"><span style="color:white; white-space:nowrap;">{{step.secsInReachedTargetTemp}} / {{step.duration * 60}} secs</span></uib-progressbar>
+                    </div>
+
+                    <div class="col-md-1">
+                        <span data-ng-show="step.duration*60 - step.secsInReachedTargetTemp > 0">{{step.duration*60 - step.secsInReachedTargetTemp | secondsToDateTime | date:'HH:mm:ss'}}</span>
+                        <span class="blink" data-ng-show="step.duration*60 - step.secsInReachedTargetTemp < 0">COMPLETE</span>
+                    </div>
+
+
+
+                </div>
+
+            </div>
+            <div class="form-group">
+                <button class="btn btn-default"  data-ng-click="vm.addNewStep()">New step</button>
+                <button class="btn btn-primary"  data-ng-click="vm.saveProgram()">Save program</button>
+                <button class="btn btn-warning" data-ng-click="vm.resetAll()">Reset program</button>
+            </div>
+        </form>
     </div>
-    <div id="text-area">
-        <div id="select-program">
-            <select ng-options="program as program.name for program in vm.programs track by program.id" ng-model="vm.selectedProgram"></select>
-            <br>
-            <button data-ng-click="vm.setCurrentProgram()">Pane!</button>
-            <button data-ng-click="vm.stopCurrentProgram()">Lopeta pano!</button>
+    <div id="text-area" class="col-md-4">
+
+        <div class="row">
+            <span class="temp" data-ng-show="vm.currentTemp" data-ng-class="{blink: (vm.currentTemp > vm.currentStep.temp-vm.temperatureTolerance && vm.currentTemp < vm.currentStep.temp+vm.temperatureTolerance), red: vm.maxTempExceeded()}">{{vm.currentTemp | number: 1}}</span>
+            <span class="temp" data-ng-show="!vm.currentTemp">N/A</span>
+            <span class="temp-c">°C</span>
         </div>
-        <span class="temp">{{vm.temperatures[vm.temperatures.length - 1].temp | number: 1}}</span>
-        <span class="temp-c">°C</span>
-        <div class="heatgroup">
-            <span class="heating-text">Heating is:</span>
-            <span data-ng-show="vm.power[0].state" class="heating-on">ON</span>
-            <span data-ng-show="!vm.power[0].state" class="heating-off">OFF</span>
+
+        <div class="row heatgroup">
+            <span class="heating-text">Heating is </span>
+            <span data-ng-show="vm.power.state" class="heating-on">ON</span>
+            <span data-ng-show="!vm.power.state" class="heating-off">OFF</span>
         </div>
-        <div class="logoholder">
+
+        <div class="row">
+            <button class="btn btn-success" data-ng-click="vm.powerOn()" data-ng-show="vm.currentStep.temp">Heat ON</button>
+            <button class="btn btn-danger" data-ng-click="vm.powerOff(true)" data-ng-show="vm.currentStep.temp">Heat OFF</button>
+            <span class="blink" data-ng-show="vm.currentStep && !vm.power.state && (vm.currentTemp < vm.currentStep.temp-vm.temperatureTolerance)">Turn the heat ON!</span>
+            <span class="blink" data-ng-show="vm.currentStep && vm.power.state && (vm.currentTemp > vm.currentStep.temp+vm.temperatureTolerance)">Turn the heat OFF!</span>
+        </div>
+
+        <div class="row logoholder">
             <span class="power">POWERED BY</span>
             <img class="logo" src="img/logo.png" />
         </div>
     </div>
-</div>
+

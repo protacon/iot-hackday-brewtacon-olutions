@@ -25,10 +25,12 @@
      */
     function TemperatureService(Firebase, config, dataservice) {
         return {
-            setCurrentProgram: setCurrentProgram,
-            getPrograms: getPrograms,
-            clearTemperatures: clearTemperatures
-
+            setCurrentStep: setCurrentStep,
+            getProgram: getProgram,
+            resetAll: resetAll,
+            powerControl: powerControl,
+            mockTemperature: mockTemperature,
+            saveProgram: saveProgram
         };
 
         ////////////////////
@@ -41,56 +43,70 @@
          * @param   {string}  [identifier]
          * @returns {Firebase}
          */
-        function setCurrentProgram(program) {
+        function setCurrentStep(step) {
+
             var date = new Date(Date.now());
-            for(var i = 0; i < program.steps.length; i++) {
+            step.startDate = date.getTime();
+            step.endDate = new Date(date.getTime() + step.duration*60000).getTime();
 
-                if (i == 0) {
-                    program.steps[i].startDate = date.getTime();
-                    program.steps[i].endDate = new Date(date.getTime() + program.steps[i].duration*60000).getTime();
-                } else {
-                    program.steps[i].startDate = program.steps[i-1].endDate;
-                    program.steps[i].endDate = new Date(program.steps[i].startDate + program.steps[i].duration*60000).getTime();
-                }
-            }
+            var firebase = dataservice.getReference('CurrentStep');
 
-            program.state = true;
-
-            var firebase = dataservice.getReference('CurrentProgram');
-
-            firebase.set(program);
+            firebase.set(step);
         }
+        function clearStep() {
+            var firebase = dataservice.getReference('CurrentStep');
 
+            firebase.set([]);
+        }
         function clearTemperatures() {
             var firebase = dataservice.getReference('Temperatures');
 
             firebase.set([]);
         }
+        function resetAll() {
+            clearTemperatures();
+            clearStep();
+        }
+        function saveProgram(program) {
 
-        function getPrograms() {
-            return [
-                {
-                    name: 'otikolut',
-                    id: 1,
-                    steps: [
-                        {
-                            id: 1,
-                            temp: 25,
-                            duration: 1
-                        },
-                        {
-                            id: 2,
-                            temp: 15,
-                            duration: 1
-                        },
-                        {
-                            id: 3,
-                            temp: 20,
-                            duration: 1
-                        }
-                    ]
+            var date = new Date(Date.now());
+            program.timestamp = date.getTime();
+            var firebase = dataservice.getReference('Programs');
+            firebase.push(angular.copy(program));
+        }
+        function powerControl(power) {
+            var date = new Date(Date.now());
+            power.time = date.getTime();
+            var firebase = dataservice.getReference('Power');
+            firebase.set(power);
+        }
+        function mockTemperature(mockCurrentTemp, raise) {
+            if (!mockCurrentTemp) {
+                var mockCurrentTemp = 20;
+            }
+            var factor = 0.1;
+            var direction = (raise) ? 1.1 : 0.6;
+            return setInterval(function() {
+                var date = new Date(Date.now());
+                var timestamp  = date.getTime();
+                factor = factor*direction;
+                if (raise) {
+                    mockCurrentTemp = mockCurrentTemp + factor;
+                } else {
+                    mockCurrentTemp = mockCurrentTemp - factor;
                 }
-            ]
+                var firebase = dataservice.getReference('Temperatures');
+                firebase.push({temp: mockCurrentTemp, timestamp: timestamp});
+            }, 3000);
+        }
+
+        function getProgram() {
+            return [{
+                    name: '',
+                    timestamp: null,
+                    steps: [
+                    ]
+                }]
         }
     }
 })();
