@@ -3,17 +3,18 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
+    "postinstall": "bower install",
     "start": "gulp watch",
     "test": "gulp test"
   },
   "dependencies": {
   },
   "devDependencies": {
+    "bower": "1.7.7",
     "connect-history-api-fallback": "1.1.0",
     "event-stream": "3.3.2",
     "gulp": "3.9.0",
     "gulp-angular-filesort": "1.1.1",
-    "gulp-bower-files": "0.2.7",
     "gulp-cached": "1.1.0",
     "gulp-clean": "0.3.1",
     "gulp-concat": "2.6.0",
@@ -38,6 +39,7 @@
     "gulp-util": "3.0.7",
     "jshint-stylish": "2.0.1",
     "lazypipe": "1.0.1",
+    "main-bower-files": "2.11.1",
     "sort-stream": "1.0.1",
     "streamqueue": "1.1.1",
     "tiny-lr": "0.2.1"

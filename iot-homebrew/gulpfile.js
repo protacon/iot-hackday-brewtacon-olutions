@@ -4,6 +4,7 @@
 var gulp = require('gulp');
 var fs = require('fs');
 var g = require('gulp-load-plugins')({lazy: false});
+var mainBowerFiles = require('main-bower-files');
 var ngConstant = require('gulp-ng-constant');
 var noop = g.util.noop;
 var es = require('event-stream');
@@ -87,7 +88,7 @@ gulp.task('templates-dist', function() {
  * Vendors
  */
 gulp.task('vendors', function() {
-  var bowerStream = g.bowerFiles();
+  var bowerStream = gulp.src(mainBowerFiles());
 
   return es.merge(
     bowerStream.pipe(g.filter('**/*.css')).pipe(dist('css', 'vendors')),
@@ -105,7 +106,7 @@ function index() {
   var opt = {read: false};
 
   return gulp.src('./src/app/index.html')
-    .pipe(g.inject(g.bowerFiles(opt), {ignorePath: 'bower_components', starttag: '<!-- inject:vendor:{{ext}} -->'}))
+    .pipe(g.inject(gulp.src(mainBowerFiles(opt)), {ignorePath: 'bower_components', starttag: '<!-- inject:vendor:{{ext}} -->'}))
     .pipe(g.inject(es.merge(appFiles(), cssFiles(opt)), {ignorePath: ['.tmp', 'src/app']}))
     .pipe(g.embedlr())
     .pipe(gulp.dest('./.tmp/'))
@@ -255,7 +256,7 @@ gulp.task('karma-conf', ['templates'], function() {
  */
 function testFiles() {
   return new queue({objectMode: true})
-    .queue(g.bowerFiles().pipe(g.filter('**/*.js')))
+    .queue(gulp.src(mainBowerFiles()).pipe(g.filter('**/*.js')))
     .queue(gulp.src('./bower_components/angular-mocks/angular-mocks.js'))
     .queue(appFiles())
     .queue(gulp.src('./src/app/**/*.spec.js'))
