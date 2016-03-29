@@ -35,7 +35,7 @@
       {
         state: 'temperature',
         config: {
-          url: '/temperature',
+          url: '/',
           parent: 'iot',
           title: 'Temperature',
           containerClass: 'temperature-container',
@@ -73,6 +73,14 @@
     return $firebaseArray(dataservice.getReference('Temperatures'));
   }
 
+  /**
+   * @ngInject
+   *
+   * @param   {AngularFireArrayService} $firebaseArray
+   * @param   {Factories.Dataservice}   dataservice
+   * @returns {ng.IPromise<TResult>}
+   * @private
+   */
   function _latest($firebaseArray, dataservice) {
     var ref = dataservice.getReference('Temperatures');
 
@@ -82,6 +90,14 @@
     return  $firebaseArray(query);
   }
 
+  /**
+   * @ngInject
+   *
+   * @param   {AngularFireArrayService} $firebaseArray
+   * @param   {Factories.Dataservice}   dataservice
+   * @returns {ng.IPromise<TResult>}
+   * @private
+   */
     function _program($firebaseObject, dataservice) {
         var ref = dataservice.getReference('Programs');
 
@@ -91,6 +107,14 @@
         return  $firebaseObject(ref);
     }
 
+  /**
+   * @ngInject
+   *
+   * @param   {AngularFireArrayService} $firebaseArray
+   * @param   {Factories.Dataservice}   dataservice
+   * @returns {ng.IPromise<TResult>}
+   * @private
+   */
   function _power($firebaseArray, dataservice) {
     var ref = dataservice.getReference('Power');
 
@@ -100,6 +124,14 @@
     return  $firebaseArray(query);
   }
 
+  /**
+   * @ngInject
+   *
+   * @param   {AngularFireArrayService} $firebaseArray
+   * @param   {Factories.Dataservice}   dataservice
+   * @returns {ng.IPromise<TResult>}
+   * @private
+   */
   function _currentStep($firebaseObject, dataservice) {
     return $firebaseObject(dataservice.getReference('CurrentStep'))
   }

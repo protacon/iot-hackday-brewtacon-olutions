@@ -17,13 +17,11 @@
      * @memberOf Factories
      * @ngInject
      *
-     * @param   {Firebase}  Firebase
-     * @param   {object}    config
      * @returns {{
    *    getReference: Factories.Dataservice.getReference
    *  }}
      */
-    function TemperatureService(Firebase, config, dataservice) {
+    function TemperatureService(dataservice) {
         return {
             setCurrentStep: setCurrentStep,
             getProgram: getProgram,

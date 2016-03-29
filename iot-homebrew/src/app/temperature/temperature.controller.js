@@ -10,7 +10,7 @@
     .module('iot.temperature')
     .controller('TemperatureController', TemperatureController)
   ;
-
+    
   /**
    * @desc      Controller implementation for /demo route.
    * @namespace Demo
@@ -19,7 +19,7 @@
    *
    * @constructor
    */
-  function TemperatureController($scope, _temperatures, _latest, _power, _currentStep, _program, TemperatureService, toastr) {
+  function TemperatureController($scope, TemperatureService, toastr, _temperatures, _latest, _power, _currentStep, _program) {
     var vm = this;
 
     vm.temperatures = _temperatures;
@@ -37,7 +37,7 @@
           temp: null,
           secsInReachedTargetTemp: 0,
           reachedTargetTempAt: null
-      }
+      };
 
       // Graph data
       vm.data = [];
@@ -51,19 +51,19 @@
           } else {
               return 'info';
           }
-      }
+      };
 
       vm.minTemp = function () {
         if (!vm.currentStep) return 0;
         return parseFloat(vm.currentStep.temp)-parseFloat(vm.temperatureTolerance);
-      }
+      };
       vm.maxTemp = function () {
           if (!vm.currentStep) return 0;
           return parseFloat(vm.currentStep.temp)+parseFloat(vm.temperatureTolerance);
-      }
+      };
       vm.maxTempExceeded = function () {
           return vm.currentTemp > vm.maxTemp();
-      }
+      };
 
       vm.saveProgram = function() {
           vm.program.$save().then(function() {
@@ -85,7 +85,7 @@
       vm.resetCurrentStep = function () {
           vm.currentStep.on = false;
           vm.currentStep = null;
-      }
+      };
       vm.resetAll = function (){
           vm.currentStep = null;
           vm.currentTemp = null;
@@ -98,7 +98,7 @@
               vm.program[0].steps = [];
           }
           vm.program[0].steps.push(angular.copy(step));
-      }
+      };
       vm.removeStep = function (i) {
           for (var key in vm.program[0].steps) {
               if (key == i) {
@@ -108,19 +108,19 @@
           if (vm.program[0].steps.length == 0) {
               vm.resetCurrentStep();
           }
-      }
+      };
       vm.powerOn = function () {
         vm.power.state = true;
         TemperatureService.powerControl(angular.copy(vm.power));
         //clearInterval(vm.mockInterval);
         //vm.mockInterval = TemperatureService.mockTemperature(vm.currentTemp, true);
-      }
+      };
       vm.powerOff = function (mock) {
         vm.power.state = false;
         TemperatureService.powerControl(angular.copy(vm.power));
         //clearInterval(vm.mockInterval);
         //if (mock) vm.mockInterval = TemperatureService.mockTemperature(vm.currentTemp, false);
-      }
+      };
 
       // Chart configuration
       vm.chartConfig =  {
