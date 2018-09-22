@@ -120,7 +120,7 @@ while True:
 
 	post_temp(current_temp)
 
-	if override != 0
+	if override != 0:
 		print("Overrided " + override)
 	elif current_temp > (desired_temp - hysteresis) and power_is_on == True:
 		power_off()
