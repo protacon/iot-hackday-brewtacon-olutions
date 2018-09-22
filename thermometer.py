@@ -1,16 +1,15 @@
-import os
-import glob
-import time
-import RPi.GPIO as GPIO
-import json
-from datetime import datetime
+import os 
+import glob 
+import time 
+import RPi.GPIO as GPIO 
+import json 
+from datetime import datetime 
 from firebase import firebase
 
 os.system('modprobe w1-gpio')
 os.system('modprobe w1-therm')
 
 import requests.packages.urllib3
-requests.packages.urllib3.disable_warnings()
 
 firebase = firebase.FirebaseApplication('https://iot-homebrew.firebaseio.com', None)
 
@@ -18,8 +17,8 @@ base_dir = '/sys/bus/w1/devices/'
 device_folder = glob.glob(base_dir + '28*')[0]
 device_file = device_folder + '/w1_slave'
 
-on_pin = 26
-off_pin = 24
+on_pin = 24
+off_pin = 26
 
 GPIO.setmode(GPIO.BOARD)
 GPIO.setup(on_pin, GPIO.OUT)
@@ -44,8 +43,6 @@ def power_on():
 	print('Virta paalle')
 	global power_is_on
 	power_is_on = True
-	GPIO.output(on_pin, True)
-	time.sleep(0.5)
 	GPIO.output(on_pin, False)
 	post_power(power_is_on)
 
@@ -53,9 +50,7 @@ def power_off():
 	print('Virta pois')
 	global power_is_on
 	power_is_on = False
-	GPIO.output(off_pin, True)
-	time.sleep(0.5)
-	GPIO.output(off_pin, False)
+	GPIO.output(on_pin, True)
 	post_power(power_is_on)
 
 def read_temp():
@@ -85,23 +80,16 @@ def post_power(power):
 def get_current_program():
 	global desired_temp
 	global current_program
-	current_program = firebase.get('/CurrentProgram', None)
+	current_program = firebase.get('/CurrentStep', None)
 
 def get_desired_temp():
-	global current_step_id	
-	if current_program != None and current_program["state"] == True:
-		steps = current_program["steps"]
-		for step in steps:
-			current_time = datetime.now()
-			if current_time > datetime.fromtimestamp(step["startDate"] / 1000) and current_time < datetime.fromtimestamp(step["endDate"] / 1000):
-				current_step_id = step["id"]
-				return step["temp"]
-	current_step_id = None
+	if current_program != None:
+		return float(current_program["temp"])
 	return 0
 
 GPIO.output(on_pin, False)
 GPIO.output(off_pin, False)
-
+power_off()
 print('Aloitetaan')
 print('Laitefilu: ' + device_file)
 loops = 0
@@ -118,7 +106,7 @@ while True:
 
 	post_temp(current_temp)
 
-	if current_temp > (desired_temp + hysteresis) and power_is_on == True:
+	if current_temp > (desired_temp - hysteresis) and power_is_on == True:
 		power_off()
 	elif current_temp < (desired_temp - hysteresis) and power_is_on == False:
 		power_on()
