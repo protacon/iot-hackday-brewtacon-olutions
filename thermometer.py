@@ -18,11 +18,11 @@ device_folder = glob.glob(base_dir + '28*')[0]
 device_file = device_folder + '/w1_slave'
 
 on_pin = 24
-off_pin = 26
+on_pin2 = 26
 
 GPIO.setmode(GPIO.BOARD)
 GPIO.setup(on_pin, GPIO.OUT)
-GPIO.setup(off_pin, GPIO.OUT)
+GPIO.setup(on_pin2, GPIO.OUT)
 
 override = 0
 desired_temp = 0
@@ -45,6 +45,7 @@ def power_on():
 	global power_is_on
 	power_is_on = True
 	GPIO.output(on_pin, True)
+	GPIO.output(on_pin2, True)
 	post_power(power_is_on)
 
 def power_off():
@@ -52,6 +53,7 @@ def power_off():
 	global power_is_on
 	power_is_on = False
 	GPIO.output(on_pin, False)
+	GPIO.output(on_pin2, False)
 	post_power(power_is_on)
 
 def read_temp():
@@ -94,7 +96,7 @@ def get_desired_temp():
 	return 0
 
 GPIO.output(on_pin, False)
-GPIO.output(off_pin, False)
+GPIO.output(on_pin2, False)
 power_off()
 print('Aloitetaan')
 print('Laitefilu: ' + device_file)
