@@ -75,6 +75,7 @@
         function powerControl(power) {
             var date = new Date(Date.now());
             power.time = date.getTime();
+            console.log('helo with', power)
             var firebase = dataservice.getReference('Power');
             firebase.set(power);
         }

@@ -105,10 +105,13 @@
         </div>
 
         <div class="row">
-            <button class="btn btn-success" data-ng-click="vm.powerOn()" data-ng-show="vm.currentStep.temp">Heat ON</button>
-            <button class="btn btn-danger" data-ng-click="vm.powerOff(true)" data-ng-show="vm.currentStep.temp">Heat OFF</button>
-            <span class="blink" data-ng-show="vm.currentStep && !vm.power.state && (vm.currentTemp < vm.currentStep.temp-vm.temperatureTolerance)">Turn the heat ON!</span>
-            <span class="blink" data-ng-show="vm.currentStep && vm.power.state && (vm.currentTemp > vm.currentStep.temp+vm.temperatureTolerance)">Turn the heat OFF!</span>
+            <button class="btn btn-success" data-ng-click="vm.powerOn()" data-ng-show="vm.currentStep.temp">ON</button>
+            <button class="btn btn-danger" data-ng-click="vm.powerOff(true)" data-ng-show="vm.currentStep.temp">OFF</button>
+            <button class="btn btn-primary" data-ng-click="vm.powerAuto()" data-ng-show="vm.currentStep.temp">AUTO</button>
+            <span>&emsp;</span>
+            <span class="blink" data-ng-show="vm.currentStep && vm.power.override !== 0 && !vm.power.state && (vm.currentTemp < vm.currentStep.temp-vm.temperatureTolerance)">Turn the heat ON!</span>
+            <span class="blink" data-ng-show="vm.currentStep && vm.power.override !== 0 && vm.power.state && (vm.currentTemp > vm.currentStep.temp+vm.temperatureTolerance)">Turn the heat OFF!</span>
+            <span class="blink" data-ng-show="vm.currentStep && vm.power.override === 0">AUTO HEAT!!!</span>
         </div>
 
         <div class="row logoholder">

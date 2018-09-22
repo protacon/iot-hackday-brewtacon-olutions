@@ -19,8 +19,42 @@
    *
    * @constructor
    */
-  function TemperatureController($scope, TemperatureService, toastr, _temperatures, _latest, _power, _currentStep, _program) {
+  function TemperatureController($scope, TemperatureService, dataservice, toastr, _temperatures, _latest, _power, _currentStep, _program) {
     var vm = this;
+
+    let balls = document.getElementsByClassName('ball');
+    let ballStates = [];
+
+    for (let i = balls.length; i > 0; i--) {
+        let size = Math.random()*200;
+        ballStates[i-1] = {};
+        ballStates[i-1].width = (~~size);
+        ballStates[i-1].height = (~~size);
+        ballStates[i-1].left = (window.innerWidth * Math.random()) - ((~~size)/2)
+        ballStates[i-1].top = window.innerHeight + (Math.random()*2000);
+
+        balls[i-1].style.width = (~~size)+'px';
+        balls[i-1].style.height = (~~size)+'px';
+        balls[i-1].style.top = (~~ballStates[i-1].top) + 'px';
+        balls[i-1].style.left = (~~ballStates[i-1].left) + 'px';
+    }
+
+    (function tick() {      
+      for (let i = balls.length; i > 0; i--) {
+          ballStates[i-1].top = ballStates[i-1].top - 1;
+          if (ballStates[i-1].top < (-ballStates[i-1].height)) {
+            ballStates[i-1].top = window.innerHeight + (2*ballStates[i-1].height);
+            ballStates[i-1].left = (window.innerWidth * Math.random()) - (ballStates[i-1].width/2)
+          }
+          balls[i-1].style.top = (~~ballStates[i-1].top) + 'px';
+      }
+      setTimeout(function(){tick()}, 66);
+    })();
+
+    dataservice.getReference('Power').on('value', function(snapshot){
+        console.log(snapshot.val());
+        vm.power.state = snapshot.val().state;
+    });
 
     vm.temperatures = _temperatures;
     vm.latest = _latest;
@@ -109,17 +143,20 @@
               vm.resetCurrentStep();
           }
       };
+
       vm.powerOn = function () {
+        vm.power.override = 2;
         vm.power.state = true;
         TemperatureService.powerControl(angular.copy(vm.power));
-        //clearInterval(vm.mockInterval);
-        //vm.mockInterval = TemperatureService.mockTemperature(vm.currentTemp, true);
       };
       vm.powerOff = function (mock) {
+        vm.power.override = 1;
         vm.power.state = false;
         TemperatureService.powerControl(angular.copy(vm.power));
-        //clearInterval(vm.mockInterval);
-        //if (mock) vm.mockInterval = TemperatureService.mockTemperature(vm.currentTemp, false);
+      };
+      vm.powerAuto = function () {
+        vm.power.override = 0;
+        TemperatureService.powerControl(angular.copy(vm.power));
       };
 
       // Chart configuration

@@ -24,7 +24,7 @@
     "angular-loading-bar": "0.7.1",
     "angular-material": "0.9.8",
     "angular-sanitize": "1.7.4",
-    "angular-ui-router": "0.2.15",
+    "angular-ui-router": "0.2.18",
     "angularfire": "^1.1.1",
     "mdi": "1.1.34",
     "moment": "2.10.3",
