@@ -106,13 +106,6 @@ while True:
 	
 	if loops == 0:
 		get_current_program()
-		get_override()
-		if override == 1:
-			power_off()
-		elif override == 2:
-			power_on()
-		else:
-			override = 0
 		loops = get_current_program_interval
 	loops = loops - 1
 	
@@ -122,9 +115,17 @@ while True:
 	print("desired temp: " + str(desired_temp) + ", current temp: " + str(current_temp))
 
 	post_temp(current_temp)
+	
+	get_override()
+	if override == 1:
+		power_off()
+	elif override == 2:
+		power_on()
+	else:
+		override = 0
 
 	if override != 0:
-		print("Overrided " + override)
+		print("Overrided " + str(override))
 	elif current_temp > (desired_temp - hysteresis) and power_is_on == True:
 		power_off()
 	elif current_temp < (desired_temp - hysteresis) and power_is_on == False:
