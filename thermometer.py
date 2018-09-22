@@ -85,7 +85,7 @@ def get_current_program():
 	
 def get_override():
 	global override
-	power = firebase.get('/Power')
+	power = firebase.get('/Power', None)
 	override = power["override"]
 
 def get_desired_temp():
