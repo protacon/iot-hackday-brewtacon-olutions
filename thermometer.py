@@ -24,7 +24,7 @@ GPIO.setmode(GPIO.BOARD)
 GPIO.setup(on_pin, GPIO.OUT)
 GPIO.setup(off_pin, GPIO.OUT)
 
-override = False
+override = 0
 desired_temp = 0
 hysteresis = 0.5
 power_is_on = False
@@ -109,7 +109,7 @@ while True:
 		elif override == 2:
 			power_on()
 		else:
-			override = False
+			override = 0
 		loops = get_current_program_interval
 	loops = loops - 1
 	
@@ -120,7 +120,9 @@ while True:
 
 	post_temp(current_temp)
 
-	if current_temp > (desired_temp - hysteresis) and power_is_on == True:
+	if override != 0
+		print("Overrided " + override)
+	elif current_temp > (desired_temp - hysteresis) and power_is_on == True:
 		power_off()
 	elif current_temp < (desired_temp - hysteresis) and power_is_on == False:
 		power_on()
