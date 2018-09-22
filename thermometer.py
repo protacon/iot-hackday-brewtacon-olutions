@@ -24,6 +24,7 @@ GPIO.setmode(GPIO.BOARD)
 GPIO.setup(on_pin, GPIO.OUT)
 GPIO.setup(off_pin, GPIO.OUT)
 
+override = False
 desired_temp = 0
 hysteresis = 0.5
 power_is_on = False
@@ -43,14 +44,14 @@ def power_on():
 	print('Virta paalle')
 	global power_is_on
 	power_is_on = True
-	GPIO.output(on_pin, False)
+	GPIO.output(on_pin, True)
 	post_power(power_is_on)
 
 def power_off():
 	print('Virta pois')
 	global power_is_on
 	power_is_on = False
-	GPIO.output(on_pin, True)
+	GPIO.output(on_pin, False)
 	post_power(power_is_on)
 
 def read_temp():
@@ -81,6 +82,11 @@ def get_current_program():
 	global desired_temp
 	global current_program
 	current_program = firebase.get('/CurrentStep', None)
+	
+def get_override():
+	global override
+	power = firebase.get('/Power')
+	override = power["override"]
 
 def get_desired_temp():
 	if current_program != None:
@@ -94,11 +100,19 @@ print('Aloitetaan')
 print('Laitefilu: ' + device_file)
 loops = 0
 while True:
+	
 	if loops == 0:
 		get_current_program()
+		get_override()
+		if override == 1
+			power_off()
+		elif override == 2
+			power_on()
+		else
+			override = False
 		loops = get_current_program_interval
 	loops = loops - 1
-
+	
 	current_temp = read_temp()
 	desired_temp = get_desired_temp()
 
