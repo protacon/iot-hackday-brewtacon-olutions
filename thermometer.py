@@ -104,11 +104,11 @@ while True:
 	if loops == 0:
 		get_current_program()
 		get_override()
-		if override == 1
+		if override == 1:
 			power_off()
-		elif override == 2
+		elif override == 2:
 			power_on()
-		else
+		else:
 			override = False
 		loops = get_current_program_interval
 	loops = loops - 1
