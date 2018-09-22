@@ -49,7 +49,11 @@
 
             var firebase = dataservice.getReference('CurrentStep');
 
-            firebase.set(step);
+            firebase.set(function(step){
+                var keys = Object.keys(step).filter(prop => prop.startsWith('$'));
+                keys.forEach(function(k) { delete step[k]; });
+                return step;
+            }(step));
         }
         function clearStep() {
             var firebase = dataservice.getReference('CurrentStep');
@@ -75,7 +79,6 @@
         function powerControl(power) {
             var date = new Date(Date.now());
             power.time = date.getTime();
-            console.log('helo with', power)
             var firebase = dataservice.getReference('Power');
             firebase.set(power);
         }

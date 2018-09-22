@@ -52,7 +52,6 @@
     })();
 
     dataservice.getReference('Power').on('value', function(snapshot){
-        console.log(snapshot.val());
         vm.power.state = snapshot.val().state;
     });
 
@@ -105,6 +104,7 @@
           }).catch(function(error) {
               toastr.error('Error saving program');
           });
+          TemperatureService.setCurrentStep(angular.copy(vm.currentStep));
       };
 
     vm.setCurrentStep = function(i){
@@ -112,9 +112,13 @@
             vm.currentStep.on = false;
         }
         var step = vm.program[0].steps[i];
+        for (var j = vm.program[0].steps.length-1; j >= 0; j--) {
+            if (vm.program[0].steps[j] === step) continue;
+            vm.program[0].steps[j].on = false;
+        }
         vm.currentStep = step;
         vm.currentStep.on = true;
-        TemperatureService.setCurrentStep(angular.copy(vm.currentStep));
+        vm.saveProgram();
     };
       vm.resetCurrentStep = function () {
           vm.currentStep.on = false;
