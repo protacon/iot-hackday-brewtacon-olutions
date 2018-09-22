@@ -44,16 +44,16 @@ def power_on():
 	print('Virta paalle')
 	global power_is_on
 	power_is_on = True
-	GPIO.output(on_pin, True)
-	GPIO.output(on_pin2, True)
+	GPIO.output(on_pin, False)
+	GPIO.output(on_pin2, False)
 	post_power(power_is_on)
 
 def power_off():
 	print('Virta pois')
 	global power_is_on
 	power_is_on = False
-	GPIO.output(on_pin, False)
-	GPIO.output(on_pin2, False)
+	GPIO.output(on_pin, True)
+	GPIO.output(on_pin2, True)
 	post_power(power_is_on)
 
 def read_temp():
@@ -95,9 +95,10 @@ def get_desired_temp():
 		return float(current_program["temp"])
 	return 0
 
-GPIO.output(on_pin, False)
-GPIO.output(on_pin2, False)
+# Set initial state
 power_off()
+
+# Run program
 print('Aloitetaan')
 print('Laitefilu: ' + device_file)
 loops = 0
