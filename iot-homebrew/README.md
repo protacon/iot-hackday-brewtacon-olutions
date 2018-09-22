@@ -1,5 +1,7 @@
-# iot-hackday-gui-boilerplate
+# Panokone 2020 client
+See and control brewing temperature and process
 
-## What is this?
-
-Simple GUI boilerplate for IoT hackday. Purpose of this is to connect actual IoT devices via Firebase to this GUI.
+## Development
+- `npm install`
+- `gulp serve`
+- Go to <http://localhost:3000>
