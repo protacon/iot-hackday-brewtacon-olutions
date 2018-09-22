@@ -77,8 +77,10 @@ def post_temp(current_temp):
 
 def post_power(power):
 	global content_type
-	json_power = {"timestamp": time.time(), "state": power}
-	firebase.set(url='/Power', data=json_power, headers=content_type)
+	firebasepower = firebase.get('/Power', None)
+	firebasepower["timestamp"] = time.time()
+	firebasepower["state"] = power
+	firebasepower.update()
 
 def get_current_program():
 	global desired_temp
