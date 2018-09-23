@@ -22,11 +22,11 @@
   function TemperatureController($scope, TemperatureService, dataservice, toastr, _temperatures, _latest, _power, _currentStep, _program) {
     var vm = this;
 
-    let balls = document.getElementsByClassName('ball');
-    let ballStates = [];
+    var balls = document.getElementsByClassName('ball');
+    var ballStates = [];
 
-    for (let i = balls.length; i > 0; i--) {
-        let size = Math.random()*200;
+    for (var i = balls.length; i > 0; i--) {
+        var size = Math.random()*200;
         ballStates[i-1] = {};
         ballStates[i-1].width = (~~size);
         ballStates[i-1].height = (~~size);
@@ -40,7 +40,7 @@
     }
 
     (function tick() {      
-      for (let i = balls.length; i > 0; i--) {
+      for (var i = balls.length; i > 0; i--) {
           ballStates[i-1].top = ballStates[i-1].top - 1;
           if (ballStates[i-1].top < (-ballStates[i-1].height)) {
             ballStates[i-1].top = window.innerHeight + (2*ballStates[i-1].height);
