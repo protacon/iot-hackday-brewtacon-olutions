@@ -50,7 +50,9 @@
             var firebase = dataservice.getReference('CurrentStep');
 
             firebase.set(function(step){
-                var keys = Object.keys(step).filter(prop => prop.startsWith('$'));
+                var keys = Object.keys(step).filter(function (prop) {
+                    return prop.startsWith('$');
+                });
                 keys.forEach(function(k) { delete step[k]; });
                 return step;
             }(step));
