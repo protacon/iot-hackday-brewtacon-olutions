@@ -1,9 +1,9 @@
-import os 
-import glob 
-import time 
-import RPi.GPIO as GPIO 
-import json 
-from datetime import datetime 
+import os
+import glob
+import time
+import RPi.GPIO as GPIO
+import json
+from datetime import datetime
 from firebase import firebase
 
 os.system('modprobe w1-gpio')
@@ -41,12 +41,29 @@ def read_temp_raw():
 	return lines
 
 def power_on():
-	print('Virta paalle')
+	print('FULL POWER')
+	power_on_first_resistor()
+	power_on_second_resistor()
+
+def power_on_first_resistor():
 	global power_is_on
-	power_is_on = True
+
+	print('First resistor on')
 	GPIO.output(on_pin, False)
+
+	if !power_is_on
+		power_is_on = True
+		post_power(power_is_on)
+
+def power_on_second_resistor():
+	global power_is_on
+
+	print('Second resistor on')
 	GPIO.output(on_pin2, False)
-	post_power(power_is_on)
+
+	if !power_is_on
+		power_is_on = True
+		post_power(power_is_on)
 
 def power_off():
 	print('Virta pois')
@@ -55,6 +72,10 @@ def power_off():
 	GPIO.output(on_pin, True)
 	GPIO.output(on_pin2, True)
 	post_power(power_is_on)
+
+def power_off_second_resistor():
+	print('Second resistor off')
+	GPIO.output(on_pin2, True)
 
 def read_temp():
 	lines = read_temp_raw()
@@ -84,7 +105,7 @@ def get_current_program():
 	global desired_temp
 	global current_program
 	current_program = firebase.get('/CurrentStep', None)
-	
+
 def get_override():
 	global override
 	power = firebase.get('/Power', None)
@@ -95,6 +116,12 @@ def get_desired_temp():
 		return float(current_program["temp"])
 	return 0
 
+def set_auto_power(current_temp, desired_temp):
+	if current_temp > (desired_temp - hysteresis) and power_is_on == True:
+		power_off()
+	elif current_temp < (desired_temp - hysteresis) and power_is_on == False:
+		power_on()
+
 # Set initial state
 power_off()
 
@@ -103,19 +130,20 @@ print('Aloitetaan')
 print('Laitefilu: ' + device_file)
 loops = 0
 while True:
-	
+
 	if loops == 0:
 		get_current_program()
 		loops = get_current_program_interval
 	loops = loops - 1
-	
+
 	current_temp = read_temp()
 	desired_temp = get_desired_temp()
 
 	print("desired temp: " + str(desired_temp) + ", current temp: " + str(current_temp))
 
 	post_temp(current_temp)
-	
+
+	# Override
 	get_override()
 	if override == 1:
 		power_off()
@@ -124,11 +152,10 @@ while True:
 	else:
 		override = 0
 
+	# Automatic
 	if override != 0:
 		print("Overrided " + str(override))
-	elif current_temp > (desired_temp - hysteresis) and power_is_on == True:
-		power_off()
-	elif current_temp < (desired_temp - hysteresis) and power_is_on == False:
-		power_on()
+	else
+		set_auto_power(current_temp, desired_temp)
 
 	time.sleep(1)
