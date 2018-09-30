@@ -27,7 +27,10 @@ GPIO.setup(on_pin2, GPIO.OUT)
 override = 0
 desired_temp = 0
 hysteresis = 0.5
+extra_resistor_cutoff_temp = 5
 power_is_on = False
+first_resistor_power_on = False
+second_resistor_power_on = False
 get_current_program_interval = 5
 current_program = {}
 current_step_id = {}
@@ -46,35 +49,51 @@ def power_on():
 	power_on_second_resistor()
 
 def power_on_first_resistor():
-	global power_is_on
-
 	print('First resistor on')
+	global power_is_on
+	global first_resistor_power_on
+
+	first_resistor_power_on = True
+
 	GPIO.output(on_pin, False)
 
-	if !power_is_on
+	if power_is_on == False
 		power_is_on = True
 		post_power(power_is_on)
 
 def power_on_second_resistor():
-	global power_is_on
-
 	print('Second resistor on')
+	global power_is_on
+	global second_resistor_power_on
+
+	second_resistor_power_on = True
+
 	GPIO.output(on_pin2, False)
 
-	if !power_is_on
+	if power_is_on == False
 		power_is_on = True
 		post_power(power_is_on)
 
 def power_off():
 	print('Virta pois')
 	global power_is_on
+	global first_resistor_power_on
+	global second_resistor_power_on
+
 	power_is_on = False
+	first_resistor_power_on = False
+	second_resistor_power_on = False
+
 	GPIO.output(on_pin, True)
 	GPIO.output(on_pin2, True)
+
 	post_power(power_is_on)
 
 def power_off_second_resistor():
 	print('Second resistor off')
+	global second_resistor_power_on
+
+	second_resistor_power_on = False
 	GPIO.output(on_pin2, True)
 
 def read_temp():
@@ -117,10 +136,17 @@ def get_desired_temp():
 	return 0
 
 def set_auto_power(current_temp, desired_temp):
-	if current_temp > (desired_temp - hysteresis) and power_is_on == True:
+	first_resistor_power_off_temp = desired_temp - hysteresis
+	second_resistor_power_off_temp = first_resistor_power_off_temp - extra_resistor_cutoff_temp
+
+	if current_temp > first_resistor_power_off_temp and power_is_on == True:
 		power_off()
-	elif current_temp < (desired_temp - hysteresis) and power_is_on == False:
+	elif current_temp > second_resistor_power_off_temp and second_resistor_power_on == True:
+		power_off_second_resistor()
+	elif current_temp < second_resistor_power_off_temp and second_resistor_power_on == False:
 		power_on()
+	elif current_temp < first_resistor_power_off_temp and first_resistor_power_on == False:
+		power_on_first_resistor()
 
 # Set initial state
 power_off()
