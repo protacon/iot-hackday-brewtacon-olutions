@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+
+        <meta charset="utf-8" />
+        <meta name="viewport" content="initial-scale=1" />
+
+        <base href="/v2/" />
+
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+        <link href='https://fonts.googleapis.com/css?family=Lato:400,700,300' rel='stylesheet' type='text/css'>
+        <link href='stylesv2.css' rel='stylesheet' type='text/css'>
+    </head>
+
+    <body>
+        <div class="header-row">
+            <h1>PANOKONE 2020</h1>
+            <span class="fill-space"></span>
+            <img class="logo" src="../assets/img/logo.png" />
+        </div>
+        <div class="wrapper">
+            <div class="card">
+                <div class="card__header">
+                    <i class="material-icons header-icon">blur_on</i>
+                    <h3>Heating</h3>
+                    <span class="fill-space"></span>
+                    <span class="heating-text small-text">is </span>
+                    <span data-ng-show="vm.power.state" class="heating-on"><i class="material-icons">hot_tub</i></span>
+                    <!--<span data-ng-show="!vm.power.state" class="heating-off">><i class="material-icons">ac_unit</i>OFF</span>-->
+                </div>
+
+                <div class="card__content card__content--baseline">
+                    <span class="temp-big">66,6</span>
+                       <!-- <input type="text" class="form-control" data-ng-model="step.temp" value="{{step.temp}}" id="temp{{$index}}" placeholder="Temperature"> -->
+                    <span class="temp-c">°C</span>
+                    <span class="fill-space"></span>
+                    <span class="temp-direction">Rising...</span>
+
+                </div>
+
+                <div class="card__footer">
+                    <a class="btn selected red" data-ng-click="vm.powerOn()" data-ng-show="vm.currentStep.temp">TURN ON</a>
+                    <a class="btn blue" data-ng-click="vm.powerOff(true)" data-ng-show="vm.currentStep.temp">TURN OFF</a>
+                    <a class="btn green" data-ng-click="vm.powerAuto()" data-ng-show="vm.currentStep.temp">AUTOPILOT</a>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card__header">
+                    <i class="material-icons header-icon">format_list_numbered</i>
+                    <h3>Program</h3>
+                    <span class="fill-space"></span>
+                    <span class="small-text">{{vm.program[0].name}}</span>
+                </div>
+
+                <div class="card__content  card__content--space-between">
+                    <div>
+                        <div class="estimate">ESTIMATE TO TARGET</div>
+                        <div class="estimate-block">
+                            <i class="material-icons">bubble_chart</i>
+                            <span class="temp-estimate">60 °C</span></div>
+                        <div class="estimate-block">
+                            <i class="material-icons">av_timer</i>
+                            <span class="time-estimate">90 min</span>
+                        </div>
+                    </div>
+                    <!--
+                    <span data-ng-show="vm.currentStep.temp"><b>{{vm.currentTemp - vm.currentStep.temp | number: 1}}</b> °C
+                        <span data-ng-show="vm.estimatedSecsToTarget && vm.estimatedSecsToTarget > 0 && vm.estimatedSecsToTarget < 60*60*2 && (vm.currentTemp < vm.currentStep.temp-vm.temperatureTolerance || vm.currentTemp > vm.currentStep.temp+vm.temperatureTolerance)"><br>
+                            (approx. {{vm.estimatedSecsToTarget | secondsToDateTime | date:'HH:mm:ss'}} left)
+                        </span>
+                    </span>
+                     <span data-ng-show="!vm.currentStep.temp">N/A</span> -->
+
+                    <div class="current-step">
+                        CURRENT STEP<br>
+                        <span>60 °C (90 min)</span><br>
+                        <!-- <span data-ng-show="vm.currentStep.temp"><b>{{vm.currentStep.temp}}</b> °C ({{vm.currentStep.duration}} mins)</span><br>
+                        <!-- <span data-ng-show="!vm.currentStep.temp">N/A</span> -->
+                    </div>
+                </div>
+
+                <div class="card__footer">
+                    Tarvitaax nabbuloida ohjelmalle?
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card__header">
+                    <i class="material-icons header-icon">timeline</i>
+                    <h3>Temperature History</h3>
+                    <span class="fill-space"></span>
+                </div>
+
+                <div class="card__content">
+                    <highchart class="chart" id="chart1" config=""></highchart>
+                </div>
+            </div>
+        </div>
+
+        <!-- BOTTOM MENU -->
+        <div class="bottom-menu">
+            <div class="bottom-menu__item  bottom-menu__item--selected">
+                <i class="material-icons">local_bar</i>
+                <span>Valvomo</span>
+            </div>
+            <div href="#" class="bottom-menu__item">
+                <i class="material-icons">format_list_numbered</i>
+                <span>Ohjelma</span>
+            </div>
+            <div href="#" class="bottom-menu__item">
+                <i class="material-icons">settings</i>
+                <span>Asetukset</span>
+            </div>
+            <div href="#" class="bottom-menu__item">
+                <i class="material-icons">info</i>
+                <span>LULZ</span>
+            </div>
+        </div>
+    </body>
+</html>
