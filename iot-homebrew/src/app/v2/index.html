@@ -11,6 +11,49 @@
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
         <link href='https://fonts.googleapis.com/css?family=Lato:400,700,300' rel='stylesheet' type='text/css'>
         <link href='stylesv2.css' rel='stylesheet' type='text/css'>
+
+        <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+        <script src="https://code.highcharts.com/highcharts.js"></script>
+        <script src="https://code.highcharts.com/modules/exporting.js"></script>
+        <script src="https://code.highcharts.com/modules/export-data.js"></script>
+
+        <script type="text/javascript">
+          function removeClasses() {
+            var $body = document.body;
+            $body.classList.remove("heat-on-bg");
+            $body.classList.remove("cooling-on-bg");
+            $body.classList.remove("autopilot-on-bg");
+            document.getElementById("btn-heat-on").classList.remove('selected');
+            document.getElementById("btn-heat-off").classList.remove('selected');
+            document.getElementById("btn-autopilot").classList.remove('selected');
+          }
+
+          function heatOn() {
+            removeClasses()
+            var $body = document.body;
+            $body.classList.add("heat-on-bg");
+            document.getElementById("btn-heat-on").classList.add('selected');
+          }
+
+          function coolingOn() {
+            removeClasses()
+            var $body = document.body;
+            $body.classList.add("cooling-on-bg");
+            document.getElementById("btn-heat-off").classList.add('selected');
+          }
+
+          function autoPilotOn() {
+            removeClasses()
+            var $body = document.body;
+            $body.classList.add("autopilot-on-bg");
+            document.getElementById("btn-autopilot").classList.add('selected');
+          }
+
+          function extraButtonsToggle() {
+            document.getElementById("extra-buttons").classList.toggle('visible');
+          }
+        </script>
+
     </head>
 
     <body>
@@ -20,81 +63,118 @@
             <img class="logo" src="../assets/img/logo.png" />
         </div>
         <div class="wrapper">
-            <div class="card">
-                <div class="card__header">
-                    <i class="material-icons header-icon">blur_on</i>
-                    <h3>Heating</h3>
-                    <span class="fill-space"></span>
-                    <span class="heating-text small-text">is </span>
-                    <span data-ng-show="vm.power.state" class="heating-on"><i class="material-icons">hot_tub</i></span>
-                    <!--<span data-ng-show="!vm.power.state" class="heating-off">><i class="material-icons">ac_unit</i>OFF</span>-->
-                </div>
+            <div class="sidebar">
+                <div class="card">
+                    <div class="card__header">
+                        <i class="material-icons header-icon">blur_on</i>
+                        <h3>Heating</h3>
+                        <span class="fill-space"></span>
+                        <span class="heating-text small-text">is </span>
+                        <span data-ng-show="vm.power.state" class="heating-on"><i class="material-icons">whatshot</i></span>
+                        <!--<span data-ng-show="!vm.power.state" class="heating-off">><i class="material-icons">ac_unit</i>OFF</span>-->
+                    </div>
 
-                <div class="card__content card__content--baseline">
-                    <span class="temp-big">66,6</span>
-                       <!-- <input type="text" class="form-control" data-ng-model="step.temp" value="{{step.temp}}" id="temp{{$index}}" placeholder="Temperature"> -->
-                    <span class="temp-c">°C</span>
-                    <span class="fill-space"></span>
-                    <span class="temp-direction">Rising...</span>
-
-                </div>
-
-                <div class="card__footer">
-                    <a class="btn selected red" data-ng-click="vm.powerOn()" data-ng-show="vm.currentStep.temp">TURN ON</a>
-                    <a class="btn blue" data-ng-click="vm.powerOff(true)" data-ng-show="vm.currentStep.temp">TURN OFF</a>
-                    <a class="btn green" data-ng-click="vm.powerAuto()" data-ng-show="vm.currentStep.temp">AUTOPILOT</a>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card__header">
-                    <i class="material-icons header-icon">format_list_numbered</i>
-                    <h3>Program</h3>
-                    <span class="fill-space"></span>
-                    <span class="small-text">{{vm.program[0].name}}</span>
-                </div>
-
-                <div class="card__content  card__content--space-between">
-                    <div>
-                        <div class="estimate">ESTIMATE TO TARGET</div>
-                        <div class="estimate-block">
-                            <i class="material-icons">bubble_chart</i>
-                            <span class="temp-estimate">60 °C</span></div>
-                        <div class="estimate-block">
-                            <i class="material-icons">av_timer</i>
-                            <span class="time-estimate">90 min</span>
+                    <div class="card__content  card__content--space-between">
+                        <div>
+                            <div class="temper">CURRENT TEMP</div>
+                            <div class="temper-block">
+                                <span class="temp-big">66,6</span> °C
+                                   <!-- <input type="text" class="form-control" data-ng-model="step.temp" value="{{step.temp}}" id="temp{{$index}}" placeholder="Temperature"> -->
+                            </div>
+                        </div>
+                        <span class="fill-space"></span>
+                        <div>
+                            <div class="direction">DIRECTION</div>
+                            <div class="direction-block">
+                                <i class="material-icons temp-direction">arrow_upward</i>
+                            </div>
                         </div>
                     </div>
-                    <!--
-                    <span data-ng-show="vm.currentStep.temp"><b>{{vm.currentTemp - vm.currentStep.temp | number: 1}}</b> °C
-                        <span data-ng-show="vm.estimatedSecsToTarget && vm.estimatedSecsToTarget > 0 && vm.estimatedSecsToTarget < 60*60*2 && (vm.currentTemp < vm.currentStep.temp-vm.temperatureTolerance || vm.currentTemp > vm.currentStep.temp+vm.temperatureTolerance)"><br>
-                            (approx. {{vm.estimatedSecsToTarget | secondsToDateTime | date:'HH:mm:ss'}} left)
-                        </span>
-                    </span>
-                     <span data-ng-show="!vm.currentStep.temp">N/A</span> -->
 
-                    <div class="current-step">
-                        CURRENT STEP<br>
-                        <span>60 °C (90 min)</span><br>
-                        <!-- <span data-ng-show="vm.currentStep.temp"><b>{{vm.currentStep.temp}}</b> °C ({{vm.currentStep.duration}} mins)</span><br>
-                        <!-- <span data-ng-show="!vm.currentStep.temp">N/A</span> -->
+                    <div class="card__footer">
+                        <a id="btn-heat-on" class="btn red" data-ng-click="vm.powerOn()" onClick="heatOn()" data-ng-show="vm.currentStep.temp">TURN ON</a>
+                        <a id="btn-heat-off" class="btn blue" data-ng-click="vm.powerOff(true)" onClick="coolingOn()" data-ng-show="vm.currentStep.temp">TURN OFF</a>
+                        <a id="btn-autopilot" class="btn green" data-ng-click="vm.powerAuto()" onClick="autoPilotOn()" data-ng-show="vm.currentStep.temp">AUTOBEERLOT</a>
                     </div>
                 </div>
 
-                <div class="card__footer">
-                    Tarvitaax nabbuloida ohjelmalle?
+                <div class="card">
+                    <div class="card__header">
+                        <i class="material-icons header-icon">format_list_numbered</i>
+                        <h3>Program</h3>
+                        <span class="fill-space"></span>
+                        <span class="small-text">OhjelmannimitässäKALJA</span> <!-- TODO Ohjelman vaihto/valinta -->
+                    </div>
+                    <div class="card__content">Step name (2/6)</div>
+                    <div class="card__content  card__content--space-between">
+
+                        <div>
+                            <div class="estimate">ESTIMATE TO TARGET</div>
+                            <div class="estimate-block">
+                                <i class="material-icons">bubble_chart</i>
+                                <span class="temp-estimate">60,0</span>°C
+                            </div>
+                            <div class="estimate-block">
+                                <i class="material-icons">av_timer</i>
+                                <span class="time-estimate">90</span>min
+                            </div>
+                        </div>
+                        <!--
+                        <span data-ng-show="vm.currentStep.temp"><b>{{vm.currentTemp - vm.currentStep.temp | number: 1}}</b> °C
+                            <span data-ng-show="vm.estimatedSecsToTarget && vm.estimatedSecsToTarget > 0 && vm.estimatedSecsToTarget < 60*60*2 && (vm.currentTemp < vm.currentStep.temp-vm.temperatureTolerance || vm.currentTemp > vm.currentStep.temp+vm.temperatureTolerance)"><br>
+                                (approx. {{vm.estimatedSecsToTarget | secondsToDateTime | date:'HH:mm:ss'}} left)
+                            </span>
+                        </span>
+                         <span data-ng-show="!vm.currentStep.temp">N/A</span> -->
+
+                        <div class="current-step">
+                            <div>
+                                <div class="estimate">STEP TARGET</div>
+                                <div class="estimate-block">
+                                    <i class="material-icons"></i>
+                                    <span class="temp-estimate">60,0</span>°C
+                                </div>
+                                <div class="estimate-block">
+                                    <i class="material-icons"></i>
+                                    <span class="time-estimate">90</span>min
+                                </div>
+                            </div>
+                            <!-- <span data-ng-show="vm.currentStep.temp"><b>{{vm.currentStep.temp}}</b> °C ({{vm.currentStep.duration}} mins)</span><br>
+                            <!-- <span data-ng-show="!vm.currentStep.temp">N/A</span> -->
+                        </div>
+
+                    </div>
+
+                    <div class="card__content  card__content__proggress">
+                        <progress value="50" max="100" class="progress-bar"></progress>
+                    </div>
+
+                    <div class="card__footer">
+                        <a class="btn green selected">STEP CURRENTLY RUNNING ...</a>
+                        <a class="btn" onClick="extraButtonsToggle()"><i class="material-icons">arrow_drop_down_circle</i></a>
+                    </div>
+
+                    <div id="extra-buttons" class="card__footer hidden extra-buttons">
+                        <a class="btn blue"><i class="material-icons">skip_previous</i></a>
+                        <a class="btn blue"><i class="material-icons">pause</i></a>
+                        <a class="btn blue"><i class="material-icons">autorenew</i></a>
+                        <a class="btn blue"><i class="material-icons">skip_next</i></a>
+                    </div>
                 </div>
             </div>
 
-            <div class="card">
-                <div class="card__header">
-                    <i class="material-icons header-icon">timeline</i>
-                    <h3>Temperature History</h3>
-                    <span class="fill-space"></span>
-                </div>
+            <div class="main">
+                <div id="main-card"  class="card  card--main-card">
+                    <div class="card__header">
+                        <i class="material-icons header-icon">timeline</i>
+                        <h3>Temperature History</h3>
+                        <span class="fill-space"></span>
+                    </div>
 
-                <div class="card__content">
-                    <highchart class="chart" id="chart1" config=""></highchart>
+                    <div class="card__content">
+                       <!-- <highchart class="chart" id="chart1" config=""></highchart> -->
+                         <div id="hc_container" name="hc_container"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -103,20 +183,130 @@
         <div class="bottom-menu">
             <div class="bottom-menu__item  bottom-menu__item--selected">
                 <i class="material-icons">local_bar</i>
-                <span>Valvomo</span>
+                <span>Relax</span>
             </div>
             <div href="#" class="bottom-menu__item">
                 <i class="material-icons">format_list_numbered</i>
-                <span>Ohjelma</span>
+                <span>Program</span>
             </div>
             <div href="#" class="bottom-menu__item">
                 <i class="material-icons">settings</i>
-                <span>Asetukset</span>
+                <span>Settings</span>
             </div>
             <div href="#" class="bottom-menu__item">
                 <i class="material-icons">info</i>
-                <span>LULZ</span>
+                <span>Logs</span>
             </div>
         </div>
     </body>
+
+
+    <script>
+      // HIGHCHARTS DEMO
+        Highcharts.chart('hc_container', {
+            chart: {
+              renderTo: 'hc_container',
+              type: 'spline',
+
+              backgroundColor:'rgba(255, 255, 255, 0.0)',
+
+              animation: Highcharts.svg, // don't animate in old IE
+              marginRight: 0,
+              events: {
+                load: function () {
+
+                  // set up the updating of the chart each second
+                  var series = this.series[0];
+                  setInterval(function () {
+                    var x = (new Date()).getTime(), // current time
+                      y = Math.random()*10;
+                    series.addPoint([x, y], true, true);
+                  }, 2000);
+                }
+              }
+            },
+
+            time: {
+              useUTC: false
+            },
+
+            title: {
+              text: ''
+            },
+            xAxis: {
+              type: 'datetime',
+              tickPixelInterval: 150,
+
+            },
+            yAxis: {
+              title: {
+                text: 'Temperature (°C)'
+              },
+              plotLines: [{
+                value: 0,
+                width: 1,
+                color: '#808080'
+              }]
+            },
+            tooltip: {
+              headerFormat: '<b>{series.name}</b><br/>',
+              pointFormat: '{point.x:%Y-%m-%d %H:%M:%S}<br/>{point.y:.2f}'
+            },
+            legend: {
+              enabled: false
+            },
+            exporting: {
+              enabled: false
+            },
+
+            series: [{
+              name: 'Random data',
+              data: (function () {
+                // generate an array of random data
+                var data = [],
+                  time = (new Date()).getTime(),
+                  i;
+
+                for (i = -19; i <= 0; i += 1) {
+                  data.push({
+                    x: time + i * 1000,
+                    y: Math.random()*10
+                  });
+                }
+                return data;
+              }()),
+// Coloring for different temperatures
+              zones: [{
+                value: 3, // under 3
+                color: '#f7a35c'
+              }, {
+                value: 8, // more than 8
+                color: '#7cb5ec'
+              }, {
+                color: '#90ed7d' // between those 3 and 8 for example
+              }],
+
+            }],
+
+
+            responsive: {
+              rules: [{
+                condition: {
+                  maxWidth: 0
+                },
+                chartOptions: {
+                  chart: {
+                    height: 0
+                  },
+                  subtitle: {
+                    text: null
+                  },
+                  navigator: {
+                    enabled: false
+                  }
+                }
+              }]
+            }
+          });
+    </script>
 </html>

@@ -1,9 +1,11 @@
 $red: #F34135;
 $blue: #2096F3;
 $green: #4DAE4F;
-$text-color: #353535;
-$border-color: #dedede;
+$text-color: #fff;
+$border-color: #171B22;
+$background-color: #1F252E;
 $brewtacon-color: orange;
+$background-header: #171B22;
 
 $margin: 16px;
 $margin-half: $margin/2;
@@ -18,17 +20,34 @@ body {
   font-family: "Lato", sans-serif, Verdana;
   font-size: 16px;
   color: $text-color;
-  background: #EBEBEB;
-  /* background-image: url("../assets/img/bg.png");
-  background-attachment: fixed;
-  background-size: cover; */
+  background: #000;
   margin-bottom: 100px;
+}
+
+body::after { // Background image opacity
+  content: "";
+  background-image: url("../assets/img/bg-dark.png");
+  background-attachment: fixed;
+  background-size: cover;
+  opacity: 0.8;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  position: fixed;
+  z-index: -1;
 }
 
 .header-row {
   display: flex;
   align-items: center;
   margin: $margin $margin 0 $margin;
+
+  h1 { // PANOKONE 2020
+    font-size: 24px;
+    margin: 0;
+    letter-spacing: 3px;
+  }
 
   .logo {
     width: 30px;
@@ -38,12 +57,6 @@ body {
     object-fit: cover;
     border-radius: 50%;
   }
-}
-
-h1 { // PANOKONE 2020
-  font-size: 24px;
-  margin: 0;
-  letter-spacing: 3px;
 }
 
 h3 {
@@ -59,45 +72,96 @@ h4 {
   padding: 0;
 }
 
+// FLEX-LAYOUT
 .wrapper {
   display: flex;
   flex-flow: row wrap;
 }
 
 .wrapper > * {
-  // flex: 1 100%;
-  flex: 1 auto;
+  flex: 1 100%;
 }
 
+/* Large screens */
+@media all and (min-width: 800px) {
+  .main {
+    display: flex;
+    flex-direction: column;
+    flex: 2 0;
+    height: calc(100vh - 153px); // take almost all height
+    max-width: calc(100% - 420px); // testing
+  }
+
+  .sidebar {
+    order: 1;
+    max-width: 420px;
+  }
+}
+
+// CHART
+#hc_container {
+  width: 100%;
+  /*
+  position:relative;
+  height:100%;
+
+  @media (min-width: 800px) {
+    width: 100% !important;
+    height: 100%;
+  } */
+}
+
+// CARDS
 .card {
-  margin: $margin;
-  padding: $margin;
+  margin: $margin $margin 0 $margin;
   border: 1px solid $border-color;
-  background: #fff;
+  background: $background-color;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
   border-radius: 3px;
-  overflow: hidden; // TODO: remove when everything ready
+
+  .small-text {
+    opacity: 0.67;
+    font-size: 12px;
+  }
 
   &__header {
     display: flex;
     align-items: center;
-    margin-bottom: 8px;
-    padding-bottom: 8px;
+    margin-bottom: $margin-half;
     border-bottom: 1px solid $border-color;
+    height: 32px;
+    background: $background-header;
+    padding: $margin;
 
     .header-icon {
-      margin-right: 8px;
+      margin-right: $margin;
       opacity: 0.67;
     }
+  }
 
-    .small-text {
-      opacity: 0.67;
-      font-size: 12px;
+  &--main-card {
+    flex: 1;
+    max-height: calc(100% - #{$margin});
+    //height: 100%;
+
+    .card__content {
+      max-height: calc(100% - #{$margin*7});
+      height: calc(100% - #{$margin*7});
+      padding: 16px 32px 16px 0;
     }
+  }
+
+  &--heating {
+
+  }
+
+  &--cooling {
+
   }
 
   &__content {
     display: flex;
+    padding: $margin;
 
     &--baseline {
       align-items: baseline;
@@ -107,36 +171,54 @@ h4 {
       justify-content: space-between;
     }
 
+    &__proggress {
+      padding: 0 $margin $margin $margin;
+    }
+
     .half-card {
       text-align: left;
     }
 
-    .estimate {
+    .estimate,
+    .temper {
       opacity: 0.67;
       font-size: 12px;
+      margin-bottom: $margin;
     }
 
-    .estimate-block {
-      /* float: left; */
-      padding-right: 16px;
+    .estimate-block,
+    .temper-block,
+    .direction-block {
+      padding-right: $margin;
       display: flex;
       align-items: center;
-      font-size: 24px;
       font-weight: 200;
+
+      .time-estimate,
+      .temp-estimate {
+        font-weight: 600;
+        font-size: 24px;
+        margin-right: $margin-half;
+        line-height: 36px;
+      }
 
       i {
         display: block;
-        /* flex-flow: row; */
         font-size: 36px;
         opacity: 0.67;
         padding-right: 8px;
       }
     }
 
-    .current-step {
+    .current-step,
+    .direction {
       text-align: right;
       font-size: 12px;
       color: rgba($text-color, 0.67);
+    }
+
+    .direction {
+      margin-bottom: $margin;
     }
 
   }
@@ -144,38 +226,59 @@ h4 {
   &__footer {
     display: flex;
     justify-content: space-between;
-    padding: $margin 0 0 0;
-
-    margin-top: 8px;
-    border-top: 1px solid $border-color;
+    padding: 0 $margin $margin $margin;
 
     .btn {
       text-decoration: none;
-      font-weight: 600;
+      font-weight: 400;
       cursor: pointer;
-      font-size: 14px;
+      font-size: 12px;
+      padding: 16px;
+      border-radius: 5px;
+      color: #fff;
+      letter-spacing: 1px;
+      transition: 0.25s ease-in-out;
+      border: 1px solid #353535;
     }
 
     .btn:hover {
-      background: rgba($brewtacon-color, 0.3);
+      border: 1px solid #353535;
+      box-shadow: 0 0 5px #000;
     }
 
     .selected {
-      opacity: 0.3;
+      opacity: 0.2;
     }
 
     .green {
-      color: $green;
+      background-color: $green;
+      border: 1px solid $green;
     }
 
     .red {
-      color: $red;
+      background-color: $red;
+      border: 1px solid $red;
     }
 
     .blue {
-      color: $blue;
+      background-color: $blue;
+      border: 1px solid $blue
     }
   }
+}
+
+// EXTRA CONTENT BUTTONS
+.extra-buttons {
+  padding-top: $margin;
+  background: $background-header;
+}
+
+.hidden {
+  display: none;
+}
+
+.visible {
+  display: flex;
 }
 
 // BOTTOM MENU
@@ -185,14 +288,14 @@ h4 {
   position: fixed;
   bottom: 0;
   width: 100%;
-  height: 10vh;
+  height: 80px;
   min-height: 80px;
   align-content: center;
   align-items: center;
   flex-wrap: nowrap;
   justify-content: space-between;
   border-top: 1px solid $border-color;
-  background-color: #fefefe;
+  background-color: $background-header;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
 
   &__item {
@@ -202,6 +305,7 @@ h4 {
     flex-grow: 1;
     text-align: center;
     background: transparent;
+    transition: 0.25s ease-in-out;
 
     i {
       display: block;
@@ -221,6 +325,12 @@ h4 {
       color: orange;
     }
   }
+
+  .bottom-menu__item:hover {
+    cursor: pointer;
+    background: $background-color;
+    opacity: 1;
+  }
 }
 
 .fill-space {
@@ -234,6 +344,8 @@ h4 {
 
 .temp-big {
   font-size: 48px;
+  font-weight: 600;
+  margin-right: $margin-half;
 }
 
 .temp-c {
@@ -242,7 +354,9 @@ h4 {
 }
 
 .temp-direction {
-  font-size: 16px;
+  // margin-top: 4px;
+  font-size: 56px !important;
+  padding-right: 0 !important;
 }
 
 .heating-text {
@@ -257,6 +371,12 @@ h4 {
 .heating-off {
   color: $blue;
 }
+
+// PROGRESSBAR
+.progress-bar {
+  width: 100%;
+}
+
 
 // ANIMATIONS
 .blink {
@@ -278,4 +398,80 @@ h4 {
   100% {
     opacity: 0;
   }
+}
+
+// Heat
+.heat-on-bg {
+background: linear-gradient(359deg, #cb0000, #ed6c35, #b6562d);
+background-size: 600% 600%;
+
+-webkit-animation: HeatOn 10s ease infinite;
+-moz-animation: HeatOn 10s ease infinite;
+animation: HeatOn 10s ease infinite;
+}
+
+@-webkit-keyframes HeatOn {
+  0%{background-position:0% 86%}
+  50%{background-position:100% 15%}
+  100%{background-position:0% 86%}
+}
+@-moz-keyframes HeatOn {
+  0%{background-position:0% 86%}
+  50%{background-position:100% 15%}
+  100%{background-position:0% 86%}
+}
+@keyframes HeatOn {
+  0%{background-position:0% 86%}
+  50%{background-position:100% 15%}
+  100%{background-position:0% 86%}
+}
+
+.cooling-on-bg {
+  background: linear-gradient(359deg, #0097cb, #6895e9, #2d38b6);
+  background-size: 600% 600%;
+
+  -webkit-animation: CoolingOn 10s ease infinite;
+  -moz-animation: CoolingOn 10s ease infinite;
+  animation: CoolingOn 10s ease infinite;
+}
+
+@-webkit-keyframes CoolingOn {
+  0%{background-position:0% 86%}
+  50%{background-position:100% 15%}
+  100%{background-position:0% 86%}
+}
+@-moz-keyframes CoolingOn {
+  0%{background-position:0% 86%}
+  50%{background-position:100% 15%}
+  100%{background-position:0% 86%}
+}
+@keyframes CoolingOn {
+  0%{background-position:0% 86%}
+  50%{background-position:100% 15%}
+  100%{background-position:0% 86%}
+}
+
+.autopilot-on-bg {
+  background: linear-gradient(359deg, #00a5cb, #0ece40, #d55235);
+  background-size: 600% 600%;
+
+  -webkit-animation: AutoPilot 10s ease infinite;
+  -moz-animation: AutoPilot 10s ease infinite;
+  animation: AutoPilot 10s ease infinite;
+}
+
+@-webkit-keyframes AutoPilot {
+  0%{background-position:0% 86%}
+  50%{background-position:100% 15%}
+  100%{background-position:0% 86%}
+}
+@-moz-keyframes AutoPilot {
+  0%{background-position:0% 86%}
+  50%{background-position:100% 15%}
+  100%{background-position:0% 86%}
+}
+@keyframes AutoPilot {
+  0%{background-position:0% 86%}
+  50%{background-position:100% 15%}
+  100%{background-position:0% 86%}
 }
