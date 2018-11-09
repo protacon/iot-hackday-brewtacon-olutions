@@ -50,7 +50,8 @@
           }
 
           function extraButtonsToggle() {
-            document.getElementById("extra-buttons").classList.toggle('visible');
+            document.getElementById("extra-buttons").classList.toggle('slide-bottom');
+            document.getElementById("extra-buttons").classList.remove('hidden');
           }
         </script>
 
@@ -58,7 +59,7 @@
 
     <body>
         <div class="header-row">
-            <h1>PANOKONE 2020</h1>
+            <h1>PANOKONE 2030</h1>
             <span class="fill-space"></span>
             <img class="logo" src="../assets/img/logo.png" />
         </div>
@@ -71,7 +72,7 @@
                         <span class="fill-space"></span>
                         <span class="heating-text small-text">is </span>
                         <span data-ng-show="vm.power.state" class="heating-on"><i class="material-icons">whatshot</i></span>
-                        <!--<span data-ng-show="!vm.power.state" class="heating-off">><i class="material-icons">ac_unit</i>OFF</span>-->
+                        <span data-ng-show="!vm.power.state" class="heating-off"><i class="material-icons">ac_unit</i></span>
                     </div>
 
                     <div class="card__content  card__content--space-between">
@@ -79,7 +80,6 @@
                             <div class="temper">CURRENT TEMP</div>
                             <div class="temper-block">
                                 <span class="temp-big">66,6</span> °C
-                                   <!-- <input type="text" class="form-control" data-ng-model="step.temp" value="{{step.temp}}" id="temp{{$index}}" placeholder="Temperature"> -->
                             </div>
                         </div>
                         <span class="fill-space"></span>
@@ -119,22 +119,15 @@
                                 <span class="time-estimate">90</span>min
                             </div>
                         </div>
-                        <!--
-                        <span data-ng-show="vm.currentStep.temp"><b>{{vm.currentTemp - vm.currentStep.temp | number: 1}}</b> °C
-                            <span data-ng-show="vm.estimatedSecsToTarget && vm.estimatedSecsToTarget > 0 && vm.estimatedSecsToTarget < 60*60*2 && (vm.currentTemp < vm.currentStep.temp-vm.temperatureTolerance || vm.currentTemp > vm.currentStep.temp+vm.temperatureTolerance)"><br>
-                                (approx. {{vm.estimatedSecsToTarget | secondsToDateTime | date:'HH:mm:ss'}} left)
-                            </span>
-                        </span>
-                         <span data-ng-show="!vm.currentStep.temp">N/A</span> -->
 
                         <div class="current-step">
                             <div>
                                 <div class="estimate">STEP TARGET</div>
-                                <div class="estimate-block">
+                                <div class="step-block">
                                     <i class="material-icons"></i>
                                     <span class="temp-estimate">60,0</span>°C
                                 </div>
-                                <div class="estimate-block">
+                                <div class="step-block">
                                     <i class="material-icons"></i>
                                     <span class="time-estimate">90</span>min
                                 </div>
@@ -151,16 +144,17 @@
 
                     <div class="card__footer">
                         <a class="btn green selected">STEP CURRENTLY RUNNING ...</a>
-                        <a class="btn" onClick="extraButtonsToggle()"><i class="material-icons">arrow_drop_down_circle</i></a>
-                    </div>
-
-                    <div id="extra-buttons" class="card__footer hidden extra-buttons">
-                        <a class="btn blue"><i class="material-icons">skip_previous</i></a>
-                        <a class="btn blue"><i class="material-icons">pause</i></a>
-                        <a class="btn blue"><i class="material-icons">autorenew</i></a>
-                        <a class="btn blue"><i class="material-icons">skip_next</i></a>
+                        <a class="btn btn-with-icon" onClick="extraButtonsToggle()"><i class="material-icons">arrow_drop_down_circle</i></a>
                     </div>
                 </div>
+
+                <div id="extra-buttons" class="card__footer  extra-buttons  hidden">
+                    <a class="btn blue"><i class="material-icons">skip_previous</i></a>
+                    <a class="btn blue"><i class="material-icons">pause</i></a>
+                    <a class="btn blue"><i class="material-icons">autorenew</i></a>
+                    <a class="btn blue"><i class="material-icons">skip_next</i></a>
+                </div>
+
             </div>
 
             <div class="main">
@@ -171,7 +165,7 @@
                         <span class="fill-space"></span>
                     </div>
 
-                    <div class="card__content">
+                    <div class="card__content  card__content-graph">
                        <!-- <highchart class="chart" id="chart1" config=""></highchart> -->
                          <div id="hc_container" name="hc_container"></div>
                     </div>
@@ -181,11 +175,11 @@
 
         <!-- BOTTOM MENU -->
         <div class="bottom-menu">
-            <div class="bottom-menu__item  bottom-menu__item--selected">
+            <div href="index.html" class="bottom-menu__item  bottom-menu__item--selected">
                 <i class="material-icons">local_bar</i>
                 <span>Relax</span>
             </div>
-            <div href="#" class="bottom-menu__item">
+            <div href="program.html" class="bottom-menu__item">
                 <i class="material-icons">format_list_numbered</i>
                 <span>Program</span>
             </div>
@@ -200,13 +194,13 @@
         </div>
     </body>
 
-
     <script>
       // HIGHCHARTS DEMO
         Highcharts.chart('hc_container', {
             chart: {
               renderTo: 'hc_container',
-              type: 'spline',
+              type: 'area',
+              zoomType: 'x',
 
               backgroundColor:'rgba(255, 255, 255, 0.0)',
 
@@ -219,7 +213,7 @@
                   var series = this.series[0];
                   setInterval(function () {
                     var x = (new Date()).getTime(), // current time
-                      y = Math.random()*10;
+                      y = Math.random()*100;
                     series.addPoint([x, y], true, true);
                   }, 2000);
                 }
@@ -236,9 +230,10 @@
             xAxis: {
               type: 'datetime',
               tickPixelInterval: 150,
-
             },
             yAxis: {
+              gridLineColor: '#171A21',
+              LineColor: '#171A21',
               title: {
                 text: 'Temperature (°C)'
               },
@@ -260,34 +255,36 @@
             },
 
             series: [{
-              name: 'Random data',
+              fillOpacity: 0.2,
+              lineOpacity: 0.2,
+              lineWidth: 1,
+              name: 'Temps',
               data: (function () {
                 // generate an array of random data
                 var data = [],
                   time = (new Date()).getTime(),
                   i;
 
-                for (i = -19; i <= 0; i += 1) {
+                for (i = -190; i <= 0; i += 1) {
                   data.push({
                     x: time + i * 1000,
-                    y: Math.random()*10
+                    y: Math.random()*100 + 10
                   });
                 }
                 return data;
               }()),
-// Coloring for different temperatures
+                // Coloring for different temperatures
               zones: [{
-                value: 3, // under 3
-                color: '#f7a35c'
+                value: 45, // under 30
+                color: '#2096F3'
               }, {
-                value: 8, // more than 8
-                color: '#7cb5ec'
+                value: 75, // more than 80
+                color: '#f2a100'
               }, {
-                color: '#90ed7d' // between those 3 and 8 for example
+                color: '#F34135' // between those 30 and 80 for example
               }],
 
             }],
-
 
             responsive: {
               rules: [{
