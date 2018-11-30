@@ -361,12 +361,10 @@ h4 {
   background: $background-header;
   position: relative;
   z-index: 1;
-  // margin-top: -93px;
   margin-left: $margin;
   margin-right: $margin;
   display: flex;
   justify-content: space-between;
-
   -webkit-animation: slide-bottom-back 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
   animation: slide-bottom-back 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
 }
@@ -644,8 +642,6 @@ $input-text-active: #fff;
   position: relative;
   display: flex;
   flex-direction: row;
-  // width: 100%;
-  // max-width: 400px;
   border-radius: 2px;
   padding: 4px 8px;
   background: $input-background;
@@ -678,12 +674,13 @@ $input-text-active: #fff;
   line-height: 2.4rem;
   vertical-align: middle;
   min-width: 0;
+
   &::-webkit-input-placeholder {
     color: $input-text-inactive;
   }
 }
 
-.test {
+.step-item-input-holder {
   padding: 0 8px;
   flex: 1 1 auto;
   min-width: 0;

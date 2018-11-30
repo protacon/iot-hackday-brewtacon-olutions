@@ -514,7 +514,7 @@ h4 {
   .styled-input input::-webkit-input-placeholder {
     color: rgba(255, 255, 255, 0.3); }
 
-.test {
+.step-item-input-holder {
   padding: 0 8px;
   flex: 1 1 auto;
   min-width: 0; }
