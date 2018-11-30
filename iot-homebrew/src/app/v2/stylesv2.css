@@ -113,6 +113,9 @@ h4 {
   .card--main-card {
     flex: 1;
     max-height: calc(100% - 16px); }
+    .card--main-card--no-max-height {
+      max-height: none;
+      margin-bottom: 100px; }
     .card--main-card .card__content-graph {
       max-height: calc(100% - 112px);
       height: calc(100% - 112px);
@@ -222,13 +225,15 @@ h4 {
   display: block;
   align-items: center;
   width: 100%;
-  border-bottom: 1px solid red;
-  padding: 16px 0; }
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 16px 0;
+  background: transparent;
+  transition: 0.25s ease-in-out; }
   .prog-item .line {
     display: flex; }
 
 .step-item {
-  border-bottom: 1px solid red;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   padding: 8px 0; }
   .step-item .number {
     padding: 16px 0;
@@ -238,7 +243,11 @@ h4 {
   padding-top: 0; }
 
 .prog-item:hover {
-  background: red; }
+  opacity: 1;
+  width: 95%;
+  padding: 24px 0 24px 10px;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.67); }
 
 .extra-buttons {
   padding-top: 16px;
@@ -500,8 +509,14 @@ h4 {
   color: #fff;
   font-size: 16px;
   line-height: 2.4rem;
-  vertical-align: middle; }
+  vertical-align: middle;
+  min-width: 0; }
   .styled-input input::-webkit-input-placeholder {
     color: rgba(255, 255, 255, 0.3); }
+
+.step-item-input-holder {
+  padding: 0 8px;
+  flex: 1 1 auto;
+  min-width: 0; }
 
 /*# sourceMappingURL=stylesv2.css.map */
