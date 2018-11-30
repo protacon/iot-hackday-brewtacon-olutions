@@ -159,6 +159,11 @@ h4 {
     flex: 1;
     max-height: calc(100% - #{$margin});
 
+    &--no-max-height {
+      max-height: none;
+      margin-bottom: 100px;
+    }
+
     .card__content-graph {
       max-height: calc(100% - #{$margin*7});
       height: calc(100% - #{$margin*7});
@@ -318,8 +323,10 @@ h4 {
   display: block;
   align-items: center;
   width: 100%;
-  border-bottom: 1px solid red;
+  border-bottom: 1px solid rgba(255,255,255,0.2);
   padding: $margin 0;
+  background: transparent;
+  transition: 0.25s ease-in-out;
 
   .line {
     display: flex;
@@ -327,7 +334,7 @@ h4 {
 }
 
 .step-item {
-  border-bottom: 1px solid red;
+  border-bottom: 1px solid rgba(255,255,255,0.2);
   padding: $margin-half 0;
 
   .number {
@@ -341,7 +348,11 @@ h4 {
 }
 
 .prog-item:hover {
-  background: red;
+  opacity: 1;
+  width: 95%;
+  padding: 24px 0 24px 10px;
+  cursor: pointer;
+  color: rgba($text-color,0.67);
 }
 
 // EXTRA CONTENT BUTTONS
@@ -666,7 +677,14 @@ $input-text-active: #fff;
   font-size: 16px;
   line-height: 2.4rem;
   vertical-align: middle;
+  min-width: 0;
   &::-webkit-input-placeholder {
     color: $input-text-inactive;
   }
+}
+
+.test {
+  padding: 0 8px;
+  flex: 1 1 auto;
+  min-width: 0;
 }
