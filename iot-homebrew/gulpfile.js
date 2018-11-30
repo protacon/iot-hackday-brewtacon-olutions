@@ -46,7 +46,8 @@ gulp.task('clean-css', function() {
 gulp.task('styles', ['clean-css'], function() {
   return gulp.src([
     './src/app/**/*.scss',
-    '!./src/app/**/_*.scss'
+    '!./src/app/**/_*.scss',
+    '!./src/app/v2/*'
   ])
     .pipe(g.sass())
     .pipe(gulp.dest('./.tmp/css/'))

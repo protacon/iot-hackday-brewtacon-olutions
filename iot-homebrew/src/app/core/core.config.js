@@ -10,8 +10,8 @@
    *  }}
    */
   var config = {
-    appErrorPrefix: 'Angular/Firebase/Material - demo - Error',
-    appTitle: 'Angular/Firebase/Material - demo'
+    appErrorPrefix: 'Panokone 2030 - Error',
+    appTitle: 'Panokone 2030'
   };
 
   /**
@@ -33,13 +33,12 @@
    *
    * @param {$provide}                        $provide
    * @param {$logProvider}                    $logProvider
-   * @param {$mdThemingProvider}              $mdThemingProvider
    * @param {Providers.RouterHelperProvider}  routerHelperProvider
    * @param {Providers.ExceptionHandler}      exceptionHandlerProvider
    * @constructor
    */
   function moduleConfig(
-    $provide, $logProvider, $mdThemingProvider,
+    $provide, $logProvider,
     routerHelperProvider, exceptionHandlerProvider
   ) {
     // Add filename + line number feature to $log component
@@ -64,13 +63,6 @@
     if ($logProvider.debugEnabled) {
       $logProvider.debugEnabled(true);
     }
-
-    // Configure material design palettes
-    $mdThemingProvider
-      .theme('default')
-      .primaryPalette('blue-grey')
-      .accentPalette('blue')
-    ;
 
     // Configure exception handler provider
     exceptionHandlerProvider.configure(config.appErrorPrefix);

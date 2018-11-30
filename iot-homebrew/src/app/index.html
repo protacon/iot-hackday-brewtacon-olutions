@@ -8,10 +8,8 @@
 
         <base href="/" />
 
-        <link href="https://fonts.googleapis.com/css?family=RobotoDraft:400,500,700,400italic" rel="stylesheet" type="text/css" />
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
         <link href='https://fonts.googleapis.com/css?family=Lato:400,700,300' rel='stylesheet' type='text/css'>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 
         <!-- inject:vendor:css -->
         <!-- endinject -->
@@ -19,6 +17,11 @@
         <!-- inject:css -->
         <!-- endinject -->
 
+        <!-- TODO Handle these with dependency manager. Highcharts depends on these for some reason-->
+        <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+        <script src="https://code.highcharts.com/highcharts.src.js"></script>
+        <script src="https://code.highcharts.com/modules/exporting.js"></script>
+        <script src="https://code.highcharts.com/modules/export-data.js"></script>
 
     </head>
 
@@ -27,48 +30,38 @@
         data-ng-class="containerClass"
     >
         <div layout="column" layout-fill>
-            <nav class="navbar navbar-inverse navbar-fixed-top">
-                <div class="container">
-                    <div class="navbar-header">
-                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                            <span class="sr-only">Toggle navigation</span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                        </button>
-                        <a class="navbar-brand" href="#">PANOKONE 2020</a>
-                    </div>
-                    <!--div id="navbar" class="collapse navbar-collapse">
-                        <ul class="nav navbar-nav">
-                            <li class="active"><a href="#">Home</a></li>
-                            <li><a href="#about">About</a></li>
-                            <li><a href="#contact">Contact</a></li>
-                        </ul>
-                    </div>--<!--/.nav-collapse -->
+            <div class="header-row">
+                <h1>PANOKONE 2030</h1>
+                <span class="fill-space"></span>
+                <img class="logo" src="../assets/img/logo.png" />
+            </div>
+
+            <div id="layout" flex data-ui-view="content" class="container"></div>
+
+            <!-- BOTTOM MENU -->
+            <div class="bottom-menu">
+                <div href="/" class="bottom-menu__item  bottom-menu__item--selected">
+                    <i class="material-icons">local_bar</i>
+                    <span>Relax</span>
                 </div>
-            </nav>
-            <!--<header id="header">
-                <div data-ui-view="header"></div>
-            </header>-->
-
-            <main class='md-padding' layout="row" flex>
-                <div id="layout" flex data-ui-view="content" class="container"></div>
-            </main>
-
-            <!--<footer id="footer">
-                <div data-ui-view="footer"></div>
-            </footer>-->
+                <div href="program" class="bottom-menu__item">
+                    <i class="material-icons">format_list_numbered</i>
+                    <span>Program</span>
+                </div>
+                <div href="#" class="bottom-menu__item">
+                    <i class="material-icons">settings</i>
+                    <span>Settings</span>
+                </div>
+                <div href="#" class="bottom-menu__item">
+                    <i class="material-icons">info</i>
+                    <span>Logs</span>
+                </div>
+            </div>
         </div>
         <!-- inject:vendor:js -->
         <!-- endinject -->
 
         <!-- inject:js -->
         <!-- endinject -->
-        <div class="ball"></div><div class="ball"></div><div class="ball"></div><div class="ball"></div>
-        <div class="ball"></div><div class="ball"></div><div class="ball"></div><div class="ball"></div>
-        <div class="ball"></div><div class="ball"></div><div class="ball"></div><div class="ball"></div>
-        <div class="ball"></div><div class="ball"></div><div class="ball"></div><div class="ball"></div>
-        <!--<div class="bg-overlay"></div>-->
-        <div class="bg"></div>
     </body>
 </html>

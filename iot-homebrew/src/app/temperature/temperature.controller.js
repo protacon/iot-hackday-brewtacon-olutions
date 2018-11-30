@@ -12,14 +12,24 @@
   ;
     
   /**
-   * @desc      Controller implementation for /demo route.
+   * @desc      Temperature page controller
    * @namespace Demo
    * @memberOf  Controllers
    * @ngInject
    *
    * @constructor
    */
-  function TemperatureController($scope, TemperatureService, dataservice, toastr, _temperatures, _latest, _power, _currentStep, _program) {
+  function TemperatureController(
+    $scope,
+    TemperatureService,
+    dataservice,
+    toastr,
+    _temperatures,
+    _latest,
+    _power,
+    _currentStep,
+    _program
+  ) {
     var vm = this;
 
     var balls = document.getElementsByClassName('ball');
@@ -87,11 +97,17 @@
       };
 
       vm.minTemp = function () {
-        if (!vm.currentStep) return 0;
+        if (!vm.currentStep) {
+          return 0;
+        }
+
         return parseFloat(vm.currentStep.temp)-parseFloat(vm.temperatureTolerance);
       };
       vm.maxTemp = function () {
-          if (!vm.currentStep) return 0;
+          if (!vm.currentStep) {
+            return 0;
+          }
+
           return parseFloat(vm.currentStep.temp)+parseFloat(vm.temperatureTolerance);
       };
       vm.maxTempExceeded = function () {
@@ -163,77 +179,118 @@
         TemperatureService.powerControl(angular.copy(vm.power));
       };
 
-      // Chart configuration
-      vm.chartConfig =  {
+    // Chart configuration
+    vm.chartConfig = {
+      // Highcharts styles are valid here
+      chart: {
+        renderTo: 'hc_container',
+        type: 'area',
+        zoomType: 'x',
 
-          options: {
-              //This is the Main Highcharts chart config. Any Highchart options are valid here.
-              //will be overriden by values specified below.
-              chart: {
-                  type: 'spline',
-                  animation: Highcharts.svg, // don't animate in old IE
-                  marginRight: 10,
-                  backgroundColor:'transparent'
-              },
-              title: {
-                  text: ''
-              },
-              xAxis: {
-                  title: {text: 'Time'},
-                  color: '#FFFFFF',
-                  labels: {
-                      style: {
-                          color: '#FFFFFF'
-                      },
-                      formatter:function(){
-                          var date = new Date(this.value);
-                          var hours = date.getHours();
-                          var minutes = "0" + date.getMinutes();
-                          var seconds = "0" + date.getSeconds();
-                          var formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
-                          return formattedTime;
-                      }
-                  },
-                  type: 'datetime'
+        backgroundColor:'rgba(255, 255, 255, 0.0)',
 
-              },
-              yAxis: {
-                  labels: {
-                      style: {
-                          color: '#FFFFFF'
-                      }
-                  },
-                  title: {
-                      text: 'Temp'
-                  },
-                  plotLines: [{
-                      value: 0,
-                      width: 1,
-                      color: '#FFFFFF'
-                  }]
-              },
-              tooltip: {
-                  formatter: function () {
-                      return this.y;
-                  }
-              },
-              legend: {
-                  enabled: false
-              },
-              exporting: {
-                  enabled: false
-              }
-          },
-          series: [{
-              data: vm.data
-          }],
-          turboTreshold: true,
-          //size (optional) if left out the chart will default to size of the div or something sensible.
-          //function (optional)
-          func: function (chart) {
-              //setup some logic for the chart
+        animation: Highcharts.svg, // don't animate in old IE
+        marginRight: 0,
+        events: {
+          load: function () {
+
+            // set up the updating of the chart each second
+            var series = this.series[0];
+            setInterval(function () {
+              var x = (new Date()).getTime(), // current time
+                y = Math.random()*100;
+              series.addPoint([x, y], true, true);
+            }, 2000);
           }
-      };
+        }
+      },
+
+      time: {
+        useUTC: false
+      },
+
+      title: {
+        text: ''
+      },
+      xAxis: {
+        type: 'datetime',
+        tickPixelInterval: 150,
+      },
+      yAxis: {
+        gridLineColor: '#171A21',
+        LineColor: '#171A21',
+        title: {
+          text: 'Temperature (°C)'
+        },
+        plotLines: [{
+          value: 0,
+          width: 1,
+          color: '#808080'
+        }]
+      },
+      tooltip: {
+        headerFormat: '<b>{series.name}</b><br/>',
+        pointFormat: '{point.x:%Y-%m-%d %H:%M:%S}<br/>{point.y:.2f}'
+      },
+      legend: {
+        enabled: false
+      },
+      exporting: {
+        enabled: false
+      },
+
+      // TODO use vm.data
+      series: [{
+        fillOpacity: 0.2,
+        lineOpacity: 0.2,
+        lineWidth: 1,
+        name: 'Temps',
+        data: (function () {
+          // generate an array of random data
+          var data = [],
+            time = (new Date()).getTime(),
+            i;
+
+          for (i = -190; i <= 0; i += 1) {
+            data.push({
+              x: time + i * 1000,
+              y: Math.random()*100 + 10
+            });
+          }
+          return data;
+        }()),
+        // Coloring for different temperatures
+        zones: [{
+          value: 45, // under 30
+          color: '#2096F3'
+        }, {
+          value: 75, // more than 80
+          color: '#f2a100'
+        }, {
+          color: '#F34135' // between those 30 and 80 for example
+        }],
+
+      }],
+
+      responsive: {
+        rules: [{
+          condition: {
+            maxWidth: 0
+          },
+          chartOptions: {
+            chart: {
+              height: 0
+            },
+            subtitle: {
+              text: null
+            },
+            navigator: {
+              enabled: false
+            }
+          }
+        }]
+      }
+    };
 
       // Watch for latest temp change
       $scope.$watch('vm.latest', function(valueNew, valueOld) {

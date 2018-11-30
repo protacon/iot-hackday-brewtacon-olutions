@@ -1,4 +1,118 @@
-    <div id="chart-area" class="col-md-8">
+<div class="wrapper">
+    <div class="sidebar">
+        <div class="card">
+            <div class="card__header">
+                <i class="material-icons header-icon">blur_on</i>
+                <h3>Heating</h3>
+                <span class="fill-space"></span>
+                <span class="heating-text small-text">is </span>
+                <span data-ng-show="vm.power.state" class="heating-on"><i class="material-icons">whatshot</i></span>
+                <span data-ng-show="!vm.power.state" class="heating-off"><i class="material-icons">ac_unit</i></span>
+            </div>
+
+            <div class="card__content  card__content--space-between">
+                <div>
+                    <div class="temper">CURRENT TEMP</div>
+                    <div class="temper-block">
+                        <span class="temp-big" data-ng-bind="vm.currentTemp"></span> °C
+                    </div>
+                </div>
+                <span class="fill-space"></span>
+                <div>
+                    <div class="direction">DIRECTION</div>
+                    <div class="direction-block">
+                        <i class="material-icons temp-direction">arrow_upward</i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card__footer">
+                <!-- TODO Move shows to functions -->
+                <a id="btn-heat-on" class="btn red" data-ng-click="vm.powerOn()" onClick="heatOn()" data-ng-show="vm.currentStep && vm.power.override !== 0 && !vm.power.state && (vm.currentTemp < vm.currentStep.temp-vm.temperatureTolerance)">TURN ON</a>
+                <a id="btn-heat-off" class="btn blue" data-ng-click="vm.powerOff(true)" onClick="coolingOn()" data-ng-show="vm.currentStep && vm.power.override !== 0 && vm.power.state && (vm.currentTemp > vm.currentStep.temp+vm.temperatureTolerance)">TURN OFF</a>
+                <a id="btn-autopilot" class="btn green" data-ng-click="vm.powerAuto()" onClick="autoPilotOn()" data-ng-show="vm.currentStep && vm.power.override === 0">AUTOBEERLOT</a>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card__header">
+                <i class="material-icons header-icon">format_list_numbered</i>
+                <h3>Program</h3>
+                <span class="fill-space"></span>
+                <span class="small-text">{{vm.program[0].name}}</span> <!-- TODO Ohjelman vaihto/valinta -->
+            </div>
+            <div class="card__content">Step name (2/6)</div>
+            <div class="card__content  card__content--space-between">
+
+                <div>
+                    <div class="estimate">ESTIMATE TO TARGET</div>
+                    <div class="estimate-block">
+                        <i class="material-icons">bubble_chart</i>
+                        <span class="temp-estimate" data-ng-bind="vm.currentTemp">N/A</span>°C
+                    </div>
+                    <div class="estimate-block">
+                        <i class="material-icons">av_timer</i>
+                        <!-- TODO Calculate estimate to reach target temp -->
+                        <span class="time-estimate">90</span>min
+                    </div>
+                </div>
+
+                <div class="current-step">
+                    <div>
+                        <div class="estimate">STEP TARGET</div>
+                        <div class="step-block">
+                            <i class="material-icons"></i>
+                            <span class="temp-estimate" data-ng-bind="vm.currentStep.temp"></span>°C
+                        </div>
+                        <div class="step-block">
+                            <i class="material-icons"></i>
+                            <span class="time-estimate" data-ng-bind="vm.currentStep.duration"></span>min
+                        </div>
+                    </div>
+                    <!-- <span data-ng-show="vm.currentStep.temp"><b>{{vm.currentStep.temp}}</b> °C ({{vm.currentStep.duration}} mins)</span><br>
+                    <span data-ng-show="!vm.currentStep.temp">N/A</span> -->
+                </div>
+
+            </div>
+
+            <div class="card__content  card__content__proggress">
+                <progress value="50" max="100" class="progress-bar"></progress>
+            </div>
+
+            <div class="card__footer">
+                <a class="btn green selected">STEP CURRENTLY RUNNING ...</a>
+                <a class="btn btn-with-icon" onClick="extraButtonsToggle()"><i class="material-icons">arrow_drop_down_circle</i></a>
+            </div>
+        </div>
+        <!-- TODO Step controls -->
+        <div id="extra-buttons" class="card__footer  extra-buttons  hidden">
+            <a class="btn blue"><i class="material-icons">skip_previous</i></a>
+            <a class="btn blue"><i class="material-icons">pause</i></a>
+            <a class="btn blue"><i class="material-icons">autorenew</i></a>
+            <a class="btn blue"><i class="material-icons">skip_next</i></a>
+        </div>
+
+    </div>
+
+    <div class="main">
+        <div id="main-card"  class="card  card--main-card">
+            <div class="card__header">
+                <i class="material-icons header-icon">timeline</i>
+                <h3>Temperature History</h3>
+                <span class="fill-space"></span>
+            </div>
+
+            <div class="card__content  card__content-graph">
+                <highchart class="chart" id="hc_container" config="vm.chartConfig"></highchart>
+                <!--<div id="hc_container" name="hc_container"></div>-->
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--
+<div id="chart-area" class="col-md-8">
         <form class="form">
 
             <div class="form-group">
@@ -118,5 +232,43 @@
             <span class="power">POWERED BY</span>
             <img class="logo" src="assets/img/logo.png" />
         </div>
-    </div>
+    </div>-->
 
+<!-- TODO Use angular functions -->
+<script type="text/javascript">
+  function removeClasses() {
+    var $body = document.body;
+    $body.classList.remove("heat-on-bg");
+    $body.classList.remove("cooling-on-bg");
+    $body.classList.remove("autopilot-on-bg");
+    document.getElementById("btn-heat-on").classList.remove('selected');
+    document.getElementById("btn-heat-off").classList.remove('selected');
+    document.getElementById("btn-autopilot").classList.remove('selected');
+  }
+
+  function heatOn() {
+    removeClasses()
+    var $body = document.body;
+    $body.classList.add("heat-on-bg");
+    document.getElementById("btn-heat-on").classList.add('selected');
+  }
+
+  function coolingOn() {
+    removeClasses()
+    var $body = document.body;
+    $body.classList.add("cooling-on-bg");
+    document.getElementById("btn-heat-off").classList.add('selected');
+  }
+
+  function autoPilotOn() {
+    removeClasses()
+    var $body = document.body;
+    $body.classList.add("autopilot-on-bg");
+    document.getElementById("btn-autopilot").classList.add('selected');
+  }
+
+  function extraButtonsToggle() {
+    document.getElementById("extra-buttons").classList.toggle('slide-bottom');
+    document.getElementById("extra-buttons").classList.remove('hidden');
+  }
+</script>

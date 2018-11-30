@@ -8,7 +8,7 @@
    */
   angular
     .module('iot.core', [
-      'ngAnimate', 'ngMaterial', 'ngSanitize',
+      'ngAnimate', 'ngSanitize',
       'ui.router',
       'firebase',
       'iot-templates',
