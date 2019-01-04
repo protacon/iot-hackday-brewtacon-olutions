@@ -690,6 +690,70 @@ $input-text-active: #fff;
   100%{background-position:100% 0}
 }
 
+/* Reset Select */
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -ms-appearance: none;
+  appearance: none;
+  outline: 0;
+  box-shadow: none;
+  border: 0 !important;
+  background: $input-background;
+  background-image: none;
+}
+
+// select
+.custom-select {
+  position: relative;
+  display: block;
+  width: 180px;
+  height: 40px;
+  line-height: 2;
+  background: transparent;
+  overflow: hidden;
+  border-radius: 5px;
+}
+
+select {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0 0 0 12px;
+  color: #fff;
+  cursor: pointer;
+}
+
+select::-ms-expand {
+  display: none;
+}
+
+/* Arrow */
+.custom-select::after {
+  content: '\25BC';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  padding: 9px 12px;
+  font-size: 12px;
+  background: $input-background;
+  pointer-events: none;
+}
+
+/* Transition */
+.select:hover::after {
+  color: $brewtacon-color;
+}
+
+.select::after {
+  -webkit-transition: .25s all ease;
+  -o-transition: .25s all ease;
+  transition: .25s all ease;
+}
+
+// STYLED INPUTS
+
 .styled-input {
   position: relative;
   display: flex;

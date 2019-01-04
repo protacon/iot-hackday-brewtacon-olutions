@@ -42,8 +42,11 @@
                 <i class="material-icons header-icon">format_list_numbered</i>
                 <h3>Program</h3>
                 <span class="fill-space"></span>
-                <span class="small-text">{{vm.program[0].name}}</span> <!-- TODO: Program select / change -->
-                {{console.log(vm.programs)}}
+                <div class="custom-select"> <!-- TODO: Program select / change -->
+                    <select>
+                        <option value="value">{{vm.program[0].name}}</option>
+                    </select>
+                </div>
             </div>
             <div class="card__content">Step name (2/6)</div> <!-- TODO: stepname & count (current/total) -->
             <div class="card__content  card__content--space-between">
