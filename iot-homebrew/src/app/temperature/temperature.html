@@ -14,20 +14,23 @@
                 <div>
                     <div class="temper">CURRENT TEMP</div>
                     <div class="temper-block">
-                        <span class="temp-big" data-ng-bind="vm.currentTemp"></span> °C
+                        <span class="temp-big" data-ng-show="vm.currentTemp" data-ng-bind="vm.currentTemp"></span><span class="temp-big" data-ng-show="!vm.currentTemp">N/A</span> °C
                     </div>
                 </div>
                 <span class="fill-space"></span>
                 <div>
                     <div class="direction">DIRECTION</div>
                     <div class="direction-block">
-                        <i class="material-icons temp-direction">arrow_upward</i>
+                        <!-- TODO: temperature directions -->
+                        <i class="material-icons temp-direction">remove</i>
+                        <!-- <i class="material-icons temp-direction heating-on">arrow_upward</i>
+                        <i class="material-icons temp-direction heating-off">arrow_downward</i> -->
                     </div>
                 </div>
             </div>
 
             <div class="card__footer">
-                <!-- TODO Move shows to functions -->
+                <!-- TODO: Move shows to functions - Always show all buttons, just use disabled/enabled -->
                 <a id="btn-heat-on" class="btn red" data-ng-click="vm.powerOn()" onClick="heatOn()" data-ng-show="vm.currentStep && vm.power.override !== 0 && !vm.power.state && (vm.currentTemp < vm.currentStep.temp-vm.temperatureTolerance)">TURN ON</a>
                 <a id="btn-heat-off" class="btn blue" data-ng-click="vm.powerOff(true)" onClick="coolingOn()" data-ng-show="vm.currentStep && vm.power.override !== 0 && vm.power.state && (vm.currentTemp > vm.currentStep.temp+vm.temperatureTolerance)">TURN OFF</a>
                 <a id="btn-autopilot" class="btn green" data-ng-click="vm.powerAuto()" onClick="autoPilotOn()" data-ng-show="vm.currentStep && vm.power.override === 0">AUTOBEERLOT</a>
@@ -39,21 +42,23 @@
                 <i class="material-icons header-icon">format_list_numbered</i>
                 <h3>Program</h3>
                 <span class="fill-space"></span>
-                <span class="small-text">{{vm.program[0].name}}</span> <!-- TODO Ohjelman vaihto/valinta -->
+                <span class="small-text">{{vm.program[0].name}}</span> <!-- TODO: Program select / change -->
+                {{console.log(vm.programs)}}
             </div>
-            <div class="card__content">Step name (2/6)</div>
+            <div class="card__content">Step name (2/6)</div> <!-- TODO: stepname & count (current/total) -->
             <div class="card__content  card__content--space-between">
 
                 <div>
                     <div class="estimate">ESTIMATE TO TARGET</div>
                     <div class="estimate-block">
                         <i class="material-icons">bubble_chart</i>
-                        <span class="temp-estimate" data-ng-bind="vm.currentTemp">N/A</span>°C
+                        <!-- TODO Calculate estimate to reach target temp -->
+                        <span class="temp-estimate" data-ng-show="vm.currentTemp" data-ng-bind="vm.currentStep.temp - vm.currentTemp"></span><span class="temp-estimate" data-ng-show="!vm.currentTemp">N/A</span>°C
                     </div>
                     <div class="estimate-block">
                         <i class="material-icons">av_timer</i>
                         <!-- TODO Calculate estimate to reach target temp -->
-                        <span class="time-estimate">90</span>min
+                        <span class="time-estimate" data-ng-show="vm.currentTemp">>90</span><span class="time-estimate" data-ng-show="!vm.currentTemp">N/A</span>min
                     </div>
                 </div>
 
@@ -62,11 +67,11 @@
                         <div class="estimate">STEP TARGET</div>
                         <div class="step-block">
                             <i class="material-icons"></i>
-                            <span class="temp-estimate" data-ng-bind="vm.currentStep.temp"></span>°C
+                            <span class="temp-estimate" data-ng-show="vm.currentStep" data-ng-bind="vm.currentStep.temp"></span><span class="temp-estimate" data-ng-show="!vm.currentStep">N/A</span>°C
                         </div>
                         <div class="step-block">
                             <i class="material-icons"></i>
-                            <span class="time-estimate" data-ng-bind="vm.currentStep.duration"></span>min
+                            <span class="time-estimate" data-ng-show="vm.currentStep" data-ng-bind="vm.currentStep.duration"></span><span class="time-estimate" data-ng-show="!vm.currentStep">N/A</span>min
                         </div>
                     </div>
                     <!-- <span data-ng-show="vm.currentStep.temp"><b>{{vm.currentStep.temp}}</b> °C ({{vm.currentStep.duration}} mins)</span><br>

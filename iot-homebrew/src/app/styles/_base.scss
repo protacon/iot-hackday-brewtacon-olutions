@@ -95,6 +95,16 @@ h4 {
   flex: 1 100%;
 }
 
+.no-flex-on-mobile { // TODO: breakpoint modifiers
+  @media all and (max-width: 799px) {
+    display: block !important;
+  }
+}
+
+.max-width-30px { // TODO: move right place
+  max-width: 30px;
+}
+
 /* Large screens */
 @media all and (min-width: 800px) {
   .main {
