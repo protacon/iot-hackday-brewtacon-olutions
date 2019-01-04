@@ -7,17 +7,17 @@
    * @namespace Controllers
    */
   angular
-    .module('iot.about')
-    .controller('AboutController', AboutController)
+    .module('iot.program')
+    .controller('ProgramController', ProgramController)
   ;
 
   /**
-   * @desc      Controller implementation for /about route.
-   * @namespace About
+   * @desc      Controller implementation for /program route.
+   * @namespace Program
    * @memberOf  Controllers
    * @ngInject
    *
    * @constructor
    */
-  function AboutController() {}
+  function ProgramController() {}
 })();

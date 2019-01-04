@@ -7,8 +7,11 @@
       'iot.core',
       'iot.layout',
       'iot.temperature',
-      'highcharts-ng',
-      'ngAnimate',
+      'iot.program',
+      'iot.log',
+      'iot.settings',
+      // 'highcharts-ng',
+      // 'ngAnimate',
       'toastr'
     ])
     .filter('secondsToDateTime', [function () {

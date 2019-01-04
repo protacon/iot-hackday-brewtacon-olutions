@@ -36,23 +36,24 @@
             <img class="logo" src="../assets/img/logo.png" />
         </div>
 
-        <div id="layout" flex data-ui-view="content" class="container"></div>
+        <div id="layout" data-ui-view="content" class="container"></div>
 
         <!-- BOTTOM MENU -->
         <div class="bottom-menu">
-            <a href="/" class="bottom-menu__item  bottom-menu__item--selected">
+            <!-- TODO: Highlight active menuitem with class bottom-menu__item--selected -->
+            <a href="/" class="bottom-menu__item">
                 <i class="material-icons">local_bar</i>
                 <span>Relax</span>
             </a>
-            <a href="program.html" class="bottom-menu__item"> <!-- TODO: Linking right way? -->
+            <a href="/program" class="bottom-menu__item">
                 <i class="material-icons">format_list_numbered</i>
-                <span>Program</span>
+                <span>Programs</span>
             </a>
-            <a href="#" class="bottom-menu__item">
+            <a href="/settings" class="bottom-menu__item">
                 <i class="material-icons">settings</i>
                 <span>Settings</span>
             </a>
-            <a href="#" class="bottom-menu__item">
+            <a href="/log" class="bottom-menu__item">
                 <i class="material-icons">info</i>
                 <span>Logs</span>
             </a>

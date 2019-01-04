@@ -7,13 +7,13 @@
    * @namespace Routes
    */
   angular
-    .module('iot.about')
+    .module('iot.program')
     .run(moduleRun)
   ;
 
   /**
-   * @desc      Run block for iot.about module.
-   * @namespace About
+   * @desc      Run block for iot.program module.
+   * @namespace Program
    * @memberOf  Routes
    * @ngInject
    *
@@ -33,16 +33,16 @@
   function getStates() {
     return [
       {
-        state: 'about',
+        state: 'program',
         config: {
-          url: '/',
+          url: '/program',
           parent: 'iot',
-          title: 'About',
-          containerClass: 'about-container',
+          title: 'Program',
+          containerClass: 'program-container',
           views: {
             'content@': {
-              templateUrl: '/iot/about/about.html',
-              controller: 'AboutController',
+              templateUrl: '/iot/program/program.html',
+              controller: 'ProgramController',
               controllerAs: 'vm'
             }
           }

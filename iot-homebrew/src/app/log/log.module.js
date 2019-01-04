@@ -2,11 +2,11 @@
   'use strict';
 
   /**
-   * Initialization of iot.about module.
+   * Initialization of iot.log module.
    *
    * @namespace Modules
    */
   angular
-    .module('iot.about', [])
+    .module('iot.log', [])
   ;
 })();

@@ -105,6 +105,20 @@ h4 {
   max-width: 30px;
 }
 
+@media all and (min-width: 0) {
+  .main {
+    display: flex;
+    flex-direction: column;
+    flex: 2 0;
+    height: calc(100vh - 153px);
+
+    &--full {
+      max-width: none !important;
+      height: calc(100vh - 153px) !important;
+    }
+  }
+}
+
 /* Large screens */
 @media all and (min-width: 800px) {
   .main {
@@ -388,6 +402,7 @@ h4 {
     flex-direction: row;
     text-align: center;
     padding-bottom: 16px;
+    font-size: 12px;
   }
 
   .btn-group {
